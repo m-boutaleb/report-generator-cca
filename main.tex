@@ -1,0 +1,731 @@
+\documentclass[preprint,12pt]{elsarticle}
+
+\usepackage[T1]{fontenc}
+\usepackage{placeins}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{pgfplots}
+\pgfplotsset{
+    compat=1.18,
+    every axis/.append style={
+        grid=major,
+        major grid style={gray!30, line width=0.35pt},
+    },
+    /pgf/number format/.cd,
+    1000 sep={'},
+    dec sep={.},
+}
+\usepackage{pgfplotstable}
+
+\definecolor{colorTicino}{HTML}{9467bd}
+\definecolor{colorLugano}{HTML}{d62728}
+\definecolor{colorLocarno}{HTML}{1f77b4}
+\definecolor{colorBellinzona}{HTML}{e6c619}
+\definecolor{colorMendrisio}{HTML}{17becf}
+\definecolor{colorTreValli}{HTML}{2ca02c}
+\definecolor{color1}{HTML}{1f77b4}
+\definecolor{color2}{HTML}{ff7f0e}
+\definecolor{color3}{HTML}{2ca02c}
+\definecolor{color4}{HTML}{d62728}
+\definecolor{color5}{HTML}{9467bd}
+
+\usepackage[italian]{babel}
+\usepackage[table]{xcolor}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{hyperref}
+\usepackage{multicol}
+\setlength{\columnsep}{24pt}
+\setlength{\columnseprule}{0pt}
+
+\journal{the Swiss Federal Housing Office}
+
+\begin{document}
+\clearpage
+
+\begin{titlepage}
+\centering
+    \vspace*{\baselineskip}
+
+    \rule{\textwidth}{0.4pt}\\[\baselineskip]
+
+ {\LARGE Analisi dello scompenso dei canoni locativi sostenibili nel Canton Ticino}\\[0.2\baselineskip]
+\rule{\textwidth}{0.4pt}\vspace*{-\baselineskip}\vspace{3.2pt}
+\rule{\textwidth}{1.6pt}\\[\baselineskip]
+\scshape
+
+{\Large Rapporto di aggiornamento\par}
+\vspace{4\baselineskip}
+{\large\textsc{Osservatorio cantonale sull'alloggio\\[6.9em] Autori\\[.5em]Giovanni Branca $\&$ Domenico Altieri\\}}
+{\em  giovanni.branca@supsi.ch - domenico.altieri@supsi.ch\\}
+
+\vspace{3\baselineskip}
+{\em ISAAC, SUPSI, Mendrisio, Svizzera, CH\\}
+\vfill
+Trasmesso alla Divisione dell'Azione Sociale e delle famiglie\\ CH-6500 Bellinzona\\dss-dasf@ti.ch\\[1em]
+\vfill
+Dicembre 2025
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+
+% Figure: python apply_tikz2.py
+% Prosa capitolo Offerta: python generate_offerta_text.py
+
+% BEGIN: introduzione_prosa (auto-generated)
+\section{Introduzione}
+
+\begin{multicols}{2}
+Il presente rapporto illustra i risultati dell'analisi relativa allo scompenso di pigione sostenibile a livello cantonale e regionale per l'annualità 2025.
+
+L'elaborazione di tale indicatore si basa sull'integrazione di diverse basi dati. Per l'analisi del mercato locativo offerto (periodo 2021-2025) sono stati utilizzati i dati forniti da Wüest \& Partner AG, mentre per il mercato locativo praticato (periodo 2021-2025) sono state impiegate le Rilevazioni Strutturali dell'Ufficio federale di statistica. I dati relativi al reddito sono stati estratti dalle statistiche dell'imposta federale a cura dell'Amministrazione federale delle contribuzioni (anno 2022). Tali input hanno permesso il calcolo del tasso di sforzo, definito come rapporto tra la pigione (offerta o praticata) e il reddito, nonché la determinazione dello scompenso di pigione sostenibile e della relativa offerta di pigione sostenibile attualmente disponibile sul mercato locativo offerto.
+
+Sotto il profilo metodologico, è opportuno segnalare che i dati relativi al reddito, basati sulle pubblicazioni ufficiali dell'imposta federale, risultano aggiornati all'annualità 2022. Per quanto concerne il mercato locativo praticato, i dati sono rilevati su base annuale, mentre per il mercato locativo offerto è stata utilizzata l'estrazione più recente disponibile. L'indicatore dello scompenso di pigione sostenibile è stato elaborato internamente dal team di ricerca dell'Osservatorio cantonale sull'alloggio durante la fase di stesura del presente documento.
+
+Parallelamente alle attività di analisi descritte, è in fase di sviluppo una piattaforma di monitoraggio basata su Metabase, che sarà prossimamente resa disponibile al pubblico per la consultazione e la visualizzazione dei dati.
+\end{multicols}
+% END: introduzione_prosa (auto-generated)
+
+% BEGIN: offerta_prosa (auto-generated)
+\section{Mercato locativo offerto}
+
+\begin{multicols}{2}
+L'analisi del mercato locativo offerto nel periodo compreso tra il 2021 e il 2026 evidenzia l'evoluzione dei canoni e delle caratteristiche degli immobili messi a disposizione per la locazione a livello cantonale e regionale.
+
+A livello aggregato, come illustrato nella Figura~\ref{fig:offerta_line}, si osserva un trend di crescita del valore mediano cantonale nel periodo di riferimento, passando da 206.0 nel 2021 a 226.0 nel 2026. Tuttavia, nel confronto tra l'ultimo anno disponibile e l'anno precedente, si registra una flessione marginale del -0.88\%, con il valore che scende da 228.0 nel 2025 a 226.0 nel 2026.
+
+L'andamento territoriale risulta eterogeneo. Nel 2026, Lugano presenta il valore mediano più elevato con 245.0, registrando una variazione marginale del -0.41\% rispetto al 2025 (246.0). Locarno mostra un andamento analogo, con un valore di 226.0 nel 2026, pari a una diminuzione marginale dello -0.44\% rispetto al 2025 (227.0). Al contrario, si registra un incremento marginale dello +0.97\% a Bellinzona, dove il valore passa da 200.0 nel 2024 a 209.0 nel 2026, e a Mendrisio, che passa da 188.0 nel 2025 a 189.0 nel 2026 (+0.53\%). La variazione più marcata si osserva nell'area delle Tre Valli, che registra un aumento moderato del +2.40\%, passando da 167.0 nel 2025 a 171.0 nel 2026, pur mantenendo il valore mediano più basso tra tutte le regioni considerate.
+
+Per quanto concerne le caratteristiche medie degli alloggi, i dati riportati nella Tabella~\ref{tab:offerta_tabellina} indicano che il prezzo medio al m² è passato da 249.88 CHF nel 2025 a 243.83 CHF nel 2026, evidenziando una riduzione moderata del -2.42\%. Parallelamente, la superficie media è diminuita in modo moderato del -1.67\%, passando da 89.43 m² nel 2025 a 87.94 m² nel 2026. La media del numero di locali è rimasta sostanzialmente stabile, con un incremento marginale dello +0.65\% (da 3.06 nel 2025 a 3.08 nel 2026).
+
+Si rileva una variazione significativa nel volume dell'offerta e nei tempi di permanenza degli annunci. Il conteggio degli alloggi offerti è passato da 10'678 unità nel 2025 a 8'051 nel 2026, segnando una contrazione significativa del -24.60\%. Nello stesso periodo, la durata media d'inserzione ha subito un incremento significativo del +16.82\%, passando da 54.51 giorni nel 2025 a 63.68 giorni nel 2026.
+\end{multicols}
+% END: offerta_prosa (auto-generated)
+
+% BEGIN: offerta_figure (auto-generated)
+\begin{figure*}[htbp]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        width=\textwidth,
+        height=7cm,
+        xlabel={Anno},
+        ylabel={Prezzo [CHF/m$^2$]},
+        legend columns=3,
+        legend style={at={(0.5,-0.28)}, anchor=north, font=\footnotesize},
+        xtick=data,
+        xticklabel style={/pgf/number format/1000 sep=}
+    ]
+    \addplot[color=colorTicino, dashed, ultra thick] table [x=Anno, y=Cantonale, col sep=comma] {data/offerta_line.csv};
+    \addplot[color=colorLugano, very thick] table [x=Anno, y=Lugano, col sep=comma] {data/offerta_line.csv};
+    \addplot[color=colorLocarno, very thick] table [x=Anno, y=Locarno, col sep=comma] {data/offerta_line.csv};
+    \addplot[color=colorBellinzona, very thick] table [x=Anno, y=Bellinzona, col sep=comma] {data/offerta_line.csv};
+    \addplot[color=colorMendrisio, very thick] table [x=Anno, y=Mendrisio, col sep=comma] {data/offerta_line.csv};
+    \addplot[color=colorTreValli, very thick] table [x=Anno, y={Tre Valli}, col sep=comma] {data/offerta_line.csv};
+    \legend{Ticino, Lugano, Locarno, Bellinzona, Mendrisio, Tre Valli}
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Canone mediano regionale per anno — CHF/m² anno}
+    \label{fig:offerta_line}
+\end{figure*}
+% END: offerta_figure (auto-generated)
+
+% BEGIN: offerta_tabellina (auto-generated)
+\begin{table*}[ht]
+    \centering
+    \footnotesize
+    \label{tab:offerta_tabellina}
+    \begin{tabular}{lrrrrr}
+        \toprule
+        Anno &
+        \makecell[r]{Prezzo medio al m\textsuperscript{2} \\ {[}CHF{]}} &
+        \makecell[r]{Superficie media \\ {[}m\textsuperscript{2}{]}} &
+        \makecell[r]{Nr locali \\ medi} &
+        \makecell[r]{Osservazioni} &
+        \makecell[r]{Durata media \\ d'inserzione {[}gg{]}} \\
+        \midrule
+    2021 & 221.9 & 91.9 & 3.14 & 13'285 & 78.8 \\
+    2022 & 228.1 & 90.2 & 3.10 & 13'292 & 63.6 \\
+    2023 & 238.3 & 89.1 & 3.07 & 12'976 & 59.3 \\
+    2024 & 250.6 & 90.5 & 3.09 & 9'790 & 54.3 \\
+    2025 & 249.9 & 89.4 & 3.06 & 10'678 & 54.5 \\
+    2026 & 243.8 & 87.9 & 3.08 & 8'051 & 63.7 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Riepilogo dati sul mercato locativo praticato cantonale}
+\end{table*}
+% END: offerta_tabellina (auto-generated)
+
+\FloatBarrier
+% BEGIN: praticato_prosa (auto-generated)
+\section{Mercato locativo praticato}
+
+\begin{multicols}{2}
+L'analisi del mercato locativo praticato, basata su un campione di dati raccolti tra il 2019 e il 2023, permette di osservare l'evoluzione dei canoni effettivamente applicati e le caratteristiche degli alloggi coinvolti. Come indicato nella Tabella~\ref{tab:praticato_146}, il prezzo medio per m² a livello cantonale è passato da 188.88 nel 2022 a 192.96 nel 2023, registrando un incremento moderato del 2.16\%. Nello stesso periodo, la superficie netta media ha subito una flessione marginale dello 0.7\%, passando da 91.08 m² a 90.44 m². Anche il numero medio di locali e di persone per alloggio ha mostrato variazioni marginali, attestandosi rispettivamente a 3.16 locali e 2.26 persone nel 2023.
+
+L'analisi territoriale evidenzia un andamento eterogeneo tra le diverse regioni. Come mostrato nella Figura~\ref{fig:praticato_139}, nel passaggio tra l'ultimo anno precedente e il 2023 si registrano riduzioni dei valori in tutte le aree considerate. La flessione più marcata si osserva nelle Tre Valli, dove il valore è sceso da 145.26 a 130.77, con una diminuzione significativa del 9.97\%. A Lugano si rileva una riduzione significativa del 3.30\%, con il valore che passa da 186.14 a 180.0. Variazioni moderate sono state registrate a Mendrisio, con un calo dell'1.79\% (da 158.33 a 155.5), e a Locarno, dove il valore è sceso da 178.27 a 173.91, segnando un decremento del 2.44\%. A Bellinzona si è invece osservata una variazione marginale dello 0.33\%, con un valore finale di 170.0 rispetto ai 170.56 dell'anno precedente.
+
+Per quanto concerne la tipologia di edifici presenti nel campione del mercato locativo praticato, i dati della Figura~\ref{fig:praticato_60} mostrano una prevalenza di Case plurifamiliari, con una concentrazione maggiore a Bellinzona (73.3\%) e Mendrisio (72.7\%), mentre a Lugano tale quota è inferiore (59.8\%). Gli Edifici a uso misto o accessorio risultano più frequenti nel Luganese, dove rappresentano il 33.2\% del campione. Le Case unifamiliari mostrano una distribuzione più contenuta, raggiungendo la quota massima nelle Tre Valli con il 19.4\%.
+
+In merito all'epoca di costruzione degli immobili analizzati, la Figura~\ref{fig:praticato_62} evidenzia che le unità costruite ante 1961 sono particolarmente diffuse nelle Tre Valli (42.7\%) e a Mendrisio (35.8\%). Gli edifici realizzati nel periodo 1961-1980 rappresentano la quota più rilevante per Lugano (38.4\%) e Mendrisio (37.7\%). Gli alloggi costruiti post 2000 mostrano una presenza più marcata a Bellinzona (24.2\%) e Locarno (18.4\%), risultando meno diffusi nelle altre regioni, in particolare nelle Tre Valli (13.2\%) e a Mendrisio (13.4\%).
+\end{multicols}
+% END: praticato_prosa (auto-generated)
+
+% BEGIN: praticato_figure (auto-generated)
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        ybar,
+        width=\textwidth,
+        height=9cm,
+        bar width=6.0pt,
+        enlarge x limits=0.12,
+        ymin=109.4,
+        ymax=210.0,
+        ylabel={Canone locativo mediano [CHF]},
+        xtick={0,1,2,3,4,5,6},
+        xticklabels={
+            {Convivenze multiple},
+            {Coppie con figli 25+},
+            {Coppie con figli sotto 25},
+            {Coppie senza figli},
+            {Genitori soli con figli 25+},
+            {Genitori soli con figli sotto 25},
+            {Persone sole}
+        },
+        xticklabel style={font=\scriptsize, rotate=45, anchor=east},
+        legend columns=5,
+        legend style={at={(0.5,-0.58)}, anchor=north, font=\footnotesize},
+    ]
+    \addplot[fill=colorLugano, bar shift=-12.0pt] table [x=id, y=Lugano, col sep=comma] {data/praticato_139.csv}; \addplot[fill=colorLocarno, bar shift=-6.0pt] table [x=id, y=Locarno, col sep=comma] {data/praticato_139.csv}; \addplot[fill=colorBellinzona, bar shift=0.0pt] table [x=id, y=Bellinzona, col sep=comma] {data/praticato_139.csv}; \addplot[fill=colorMendrisio, bar shift=6.0pt] table [x=id, y=Mendrisio, col sep=comma] {data/praticato_139.csv}; \addplot[fill=colorTreValli, bar shift=12.0pt] table [x=id, y={Tre Valli}, col sep=comma] {data/praticato_139.csv};
+    \legend{Lugano, Locarno, Bellinzona, Mendrisio, Tre Valli}
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Canone locativo annuo mediano per tipologia di economia domestica — 2021 (2023) — CHF/m² anno}
+    \label{fig:praticato_139}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        ybar stacked,
+        width=\textwidth,
+        height=7cm,
+        bar width=32pt,
+        ylabel={Quota (\%)},
+        symbolic x coords={Lugano,Locarno,Bellinzona,Mendrisio,Tre Valli},
+        xtick=data,
+        legend columns=3,
+        legend style={at={(0.5,-0.28)}, anchor=north, font=\footnotesize},
+        ymin=0, ymax=103, scaled y ticks=false, ytick={0,20,40,60,80,100},
+        nodes near coords={\pgfmathprintnumber{\pgfplotspointmeta}}, nodes near coords align={center}, every node near coord/.append style={font=\tiny, text=black, fill=white, fill opacity=0.9, text opacity=1, inner sep=0.6pt, rounded corners=1pt}, clip mode=individual, 
+    ]
+    \addplot[fill=color1, point meta=explicit] table [x=Region, y={Case plurifamiliari_perc}, meta={Case plurifamiliari_abs}, col sep=comma] {data/praticato_60.csv};
+    \addplot[fill=color2, point meta=explicit] table [x=Region, y={Case unifamiliari_perc}, meta={Case unifamiliari_abs}, col sep=comma] {data/praticato_60.csv};
+    \addplot[fill=color3, point meta=explicit] table [x=Region, y={Edifici a uso misto o accessorio_perc}, meta={Edifici a uso misto o accessorio_abs}, col sep=comma] {data/praticato_60.csv};
+    \legend{Case plurifamiliari, Case unifamiliari, Edifici a uso misto o accessorio}
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Tipologia di edificio per regione}
+    \label{fig:praticato_60}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        ybar stacked,
+        width=\textwidth,
+        height=7cm,
+        bar width=32pt,
+        ylabel={Quota (\%)},
+        symbolic x coords={Lugano,Locarno,Bellinzona,Mendrisio,Tre Valli},
+        xtick=data,
+        legend columns=5,
+        legend style={at={(0.5,-0.28)}, anchor=north, font=\footnotesize},
+        ymin=0, ymax=103, scaled y ticks=false, ytick={0,20,40,60,80,100},
+        nodes near coords={\pgfmathprintnumber{\pgfplotspointmeta}}, nodes near coords align={center}, every node near coord/.append style={font=\tiny, text=black, fill=white, fill opacity=0.9, text opacity=1, inner sep=0.6pt, rounded corners=1pt}, clip mode=individual, 
+    ]
+    \addplot[fill=color1, point meta=explicit] table [x=Region, y={ante 1961_perc}, meta={ante 1961_abs}, col sep=comma] {data/praticato_62.csv};
+    \addplot[fill=color2, point meta=explicit] table [x=Region, y={1961-1980_perc}, meta={1961-1980_abs}, col sep=comma] {data/praticato_62.csv};
+    \addplot[fill=color3, point meta=explicit] table [x=Region, y={1981-1990_perc}, meta={1981-1990_abs}, col sep=comma] {data/praticato_62.csv};
+    \addplot[fill=color4, point meta=explicit] table [x=Region, y={1991-2000_perc}, meta={1991-2000_abs}, col sep=comma] {data/praticato_62.csv};
+    \addplot[fill=color5, point meta=explicit] table [x=Region, y={post 2000_perc}, meta={post 2000_abs}, col sep=comma] {data/praticato_62.csv};
+    \legend{ante 1961, 1961-1980, 1981-1990, 1991-2000, post 2000}
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Distribuzione età degli edifici per regione}
+    \label{fig:praticato_62}
+\end{figure}
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \label{tab:praticato_146}
+    \pgfplotstabletypeset[
+        col sep=comma,
+        every head row/.style={before row=\toprule, after row=\midrule},
+        every last row/.style={after row=\bottomrule},
+        columns={Year Data,Media di Prezzo Mq,Media di Net Surface,Media di Number Of Rooms,Media di Number Of People},
+        columns/{Year Data}/.style={string type, column name=Anno},
+        columns/{Media di Prezzo Mq}/.style={fixed, fixed zerofill, precision=1, column name={\makecell[r]{Prezzo medio al m\textsuperscript{2} \\ {[}CHF{]}}}},
+        columns/{Media di Net Surface}/.style={fixed, fixed zerofill, precision=1, column name={\makecell[r]{Superficie media \\ {[}m\textsuperscript{2}{]}}}},
+        columns/{Media di Number Of Rooms}/.style={fixed, fixed zerofill, precision=2, column name={\makecell[r]{Nr locali \\ medi}}},
+        columns/{Media di Number Of People}/.style={fixed, fixed zerofill, precision=2, column name={\makecell[r]{Nr persone \\ medie}}}
+    ]{data/praticato_146.csv}
+    \caption{Riepilogo dati sul mercato locativo praticato cantonale}
+\end{table}
+% END: praticato_figure (auto-generated)
+
+\FloatBarrier
+% BEGIN: reddito_prosa (auto-generated)
+\section{Reddito}
+
+\begin{multicols}{2}
+L'analisi del reddito per economia domestica, espresso in kCHF/anno, copre il periodo compreso tra il 2017 e il 2022. Come si osserva nella Figura~\ref{fig:reddito_line}, l'andamento a livello cantonale ha mostrato una crescita iniziale, raggiungendo un picco di 79.41 kCHF/anno nel 2019, seguita da una flessione nel 2020, quando il valore è sceso a 66.33 kCHF/anno. Negli anni successivi si registra una ripresa graduale, con un valore di 70.88 kCHF/anno nel 2022. Nel confronto tra l'ultimo anno disponibile e il precedente, il reddito cantonale è passato da 69.30 kCHF/anno nel 2021 a 70.88 kCHF/anno nel 2022, evidenziando un incremento moderato del 2.28\%.
+
+L'analisi territoriale per il periodo 2021–2022 mostra un andamento eterogeneo tra le diverse regioni. La regione di Lugano presenta il valore più elevato, passando da 74.0 kCHF/anno a 77.0 kCHF/anno, con una variazione significativa del 4.05\%. Si registra un incremento moderato per la regione di Mendrisio, che passa da 71.0 a 72.0 kCHF/anno (+1.41\%), e per quella di Locarno, che evolve da 57.0 a 58.0 kCHF/anno (+1.75\%). La regione di Bellinzona rimane stabile a 65.0 kCHF/anno, mentre per le Tre Valli si osserva una variazione marginale dello 0.88\%, con un passaggio da 56.5 a 57.0 kCHF/anno.
+
+Per quanto riguarda la distribuzione del reddito, i dati della Figura~\ref{fig:reddito_75} evidenziano differenze marcate tra i segmenti e le aree geografiche. La fascia di reddito più elevata (75\%+) coinvolge la percentuale maggiore di economie domestiche a Lugano (38.3\%), con un valore assoluto di 21'865 kCHF/anno, il più alto tra tutte le regioni considerate. Al contrario, le Tre Valli registrano il valore assoluto più basso per questa medesima categoria, pari a 3'088 kCHF/anno, nonostante una quota di economie domestiche pari al 28.8\%. 
+
+Nell'estremità opposta della distribuzione, la regione di Locarno mostra la percentuale più alta di economie domestiche nella fascia di reddito 0–30\%, pari al 24.3\%, con un valore assoluto di 5'141 kCHF/anno. Bellinzona presenta la quota minore in questo segmento (12.8\%), con un valore di 2'869 kCHF/anno. Nel segmento intermedio 50–75\%, si osserva una prevalenza percentuale nelle Tre Valli (26.4\%) e a Mendrisio (24.5\%), mentre Lugano registra la quota più contenuta (21.7\%).
+\end{multicols}
+% END: reddito_prosa (auto-generated)
+
+% BEGIN: reddito_figure (auto-generated)
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        width=\textwidth,
+        height=7cm,
+        xlabel={Anno},
+        ylabel={Media reddito [kCHF]},
+        legend columns=3,
+        legend style={at={(0.5,-0.28)}, anchor=north, font=\footnotesize},
+        xtick=data,
+        xticklabel style={/pgf/number format/1000 sep=}
+    ]
+    \addplot[color=colorTicino, dashed, ultra thick] table [x=Anno, y=Cantonale, col sep=comma] {data/reddito_line.csv};
+    \addplot[color=colorLugano, very thick] table [x=Anno, y=Lugano, col sep=comma] {data/reddito_line.csv};
+    \addplot[color=colorLocarno, very thick] table [x=Anno, y=Locarno, col sep=comma] {data/reddito_line.csv};
+    \addplot[color=colorBellinzona, very thick] table [x=Anno, y=Bellinzona, col sep=comma] {data/reddito_line.csv};
+    \addplot[color=colorMendrisio, very thick] table [x=Anno, y=Mendrisio, col sep=comma] {data/reddito_line.csv};
+    \addplot[color=colorTreValli, very thick] table [x=Anno, y={Tre Valli}, col sep=comma] {data/reddito_line.csv};
+    \legend{Ticino, Lugano, Locarno, Bellinzona, Mendrisio, Tre Valli}
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Reddito mediano annuo per regione — CHF anno}
+    \label{fig:reddito_line}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        ybar stacked,
+        width=\textwidth,
+        height=7cm,
+        bar width=32pt,
+        ylabel={Quota (\%)},
+        symbolic x coords={Lugano,Locarno,Bellinzona,Mendrisio,Tre Valli},
+        xtick=data,
+        legend columns=3,
+        legend style={at={(0.5,-0.28)}, anchor=north, font=\footnotesize},
+        ymin=0, ymax=103, scaled y ticks=false, ytick={0,20,40,60,80,100},
+        nodes near coords={\pgfmathprintnumber{\pgfplotspointmeta}}, nodes near coords align={center}, every node near coord/.append style={font=\tiny, text=black, fill=white, fill opacity=0.9, text opacity=1, inner sep=0.6pt, rounded corners=1pt}, clip mode=individual, 
+    ]
+    \addplot[fill=color1, point meta=explicit] table [x=Regione, y={0 30_perc}, meta={0 30_abs}, col sep=comma] {data/reddito_75.csv};
+    \addplot[fill=color2, point meta=explicit] table [x=Regione, y={30 40_perc}, meta={30 40_abs}, col sep=comma] {data/reddito_75.csv};
+    \addplot[fill=color3, point meta=explicit] table [x=Regione, y={40 50_perc}, meta={40 50_abs}, col sep=comma] {data/reddito_75.csv};
+    \addplot[fill=color4, point meta=explicit] table [x=Regione, y={50 75_perc}, meta={50 75_abs}, col sep=comma] {data/reddito_75.csv};
+    \addplot[fill=color5, point meta=explicit] table [x=Regione, y={75+_perc}, meta={75+_abs}, col sep=comma] {data/reddito_75.csv};
+    \legend{0--30k, 30--40k, 40--50k, 50--75k, 75k+}
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Distribuzione redditi per fasce di reddito — 2019}
+    \label{fig:reddito_75}
+\end{figure}
+% END: reddito_figure (auto-generated)
+
+\FloatBarrier
+% BEGIN: tasso_sforzo_prosa (auto-generated)
+\section{Tasso di sforzo}
+
+\begin{multicols}{2}
+L'analisi del tasso di sforzo permette di valutare l'incidenza dei costi locativi sul reddito medio delle economie domestiche nelle diverse regioni del Cantone. I dati riportati nella Figura~\ref{fig:tasso_di_sforzo_121} evidenziano un andamento eterogeneo tra i territori considerati, sia per quanto riguarda il mercato locativo praticato sia per quello offerto.
+
+Si osserva che il tasso di sforzo risulta sistematicamente più elevato nel mercato locativo offerto rispetto a quello praticato in tutte le regioni analizzate. Il valore più alto si registra nella regione di Locarno, dove il tasso di sforzo praticato raggiunge il 22.6\% e quello offerto sale al 24.6\%, delineando una differenza moderata di 2.0 punti percentuali. Al contrario, la regione di Mendrisio presenta l'incidenza minore, con un tasso praticato del 18.0\% e un tasso offerto del 19.5\%, per uno scarto moderato di 1.5 punti percentuali.
+
+Per quanto concerne le altre aree, la regione di Lugano mostra un tasso di sforzo praticato del 18.7\% a fronte di un tasso offerto del 21.2\%, evidenziando una variazione moderata di 2.5 punti percentuali; tale dato è osservabile nonostante Lugano presenti il reddito medio più elevato tra le regioni, pari a 90.2 kCHF/anno. Nella regione di Bellinzona il tasso praticato è del 21.1\% e quello offerto del 21.7\%, con una differenza marginale dello 0.6\%. Infine, per la regione Tre Valli si registra la convergenza maggiore tra i due indicatori, con un tasso praticato del 19.9\% e un tasso offerto del 20.1\%, a fronte di una variazione marginale dello 0.2\%.
+
+In sintesi, l'analisi territoriale mostra come la pressione finanziaria legata all'alloggio sia più accentuata nella regione di Locarno e più contenuta in quella di Mendrisio, con un divario tra canoni praticati e offerti che oscilla tra variazioni marginali e moderate a seconda dell'area geografica.
+\end{multicols}
+% END: tasso_sforzo_prosa (auto-generated)
+
+% BEGIN: tasso_sforzo_figure (auto-generated)
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        width=\textwidth,
+        height=7.5cm,
+        xbar,
+        bar width=9.0pt,
+        enlarge y limits=0.18,
+        xlabel={Tasso di sforzo (\%)},
+        xmin=17.5,
+        xmax=25.1,
+        symbolic y coords={Mendrisio,Tre Valli,Lugano,Bellinzona,Locarno},
+        ytick=data,
+        legend columns=2,
+        legend style={at={(0.5,-0.28)}, anchor=north, font=\footnotesize},
+        yticklabel style={font=\footnotesize},
+        nodes near coords, every node near coord/.append style={font=\scriptsize, anchor=west, xshift=2pt, /pgf/number format/fixed, /pgf/number format/precision=1}, clip mode=individual, 
+    ]
+    \addplot[fill=color1, bar shift=-5.2pt] table [y=Regione, x=TassoPraticato_pct, col sep=comma] {data/tasso_di_sforzo_121.csv};
+    \addplot[fill=color2, bar shift=5.2pt] table [y=Regione, x=TassoOfferto_pct, col sep=comma] {data/tasso_di_sforzo_121.csv};
+    \legend{Mercato praticato, Mercato offerto}
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Tasso di sforzo praticato e offerto per regione}
+    \label{fig:tasso_di_sforzo_121}
+\end{figure}
+% END: tasso_sforzo_figure (auto-generated)
+
+\FloatBarrier
+% BEGIN: sostenibile_prosa (auto-generated)
+\section{Offerta a pigione sostenibile}
+
+\begin{multicols}{2}
+L'analisi dell'offerta a pigione sostenibile evidenzia una distribuzione territoriale eterogenea all'interno del Canton Ticino. Come riportato nella Figura~\ref{fig:sostenibile_143}, la regione di Lugano detiene la quota maggioritaria, con 969 alloggi, pari al 49.9% del totale. Seguono la regione di Mendrisio con 336 unità (17.3%), la regione di Bellinzona con 288 (14.8%) e la regione di Locarno con 270 (13.9%), mentre la regione delle Tre Valli registra il volume più contenuto con 79 alloggi (4.1%).
+
+A livello comunale, si conferma la prevalenza del polo luganese. I dati della Figura~\ref{fig:sostenibile_118} mostrano che il comune di Lugano presenta il maggior numero di unità, pari a 458. Seguono Bellinzona con 231 alloggi, Locarno con 92, Chiasso con 82 e Mendrisio con 69. Altri centri come Massagno (51), Balerna (45), Caslano (35), Vacallo (30) e Ascona (26) completano i primi dieci comuni per volume di offerta a pigione sostenibile.
+
+Per quanto concerne la composizione tipologica, l'offerta a pigione sostenibile è concentrata prevalentemente nelle unità di medie dimensioni. Come illustrato nella Figura~\ref{fig:sostenibile_104}, la categoria 3 - 3.5 locali risulta la più frequente con 602 unità, seguita dalla categoria 4 - 4.5 locali con 550 alloggi. Le tipologie più piccole, specificamente la categoria 1 - 1.5 locali, e quelle di dimensioni maggiori, pari o superiori a 8 locali, registrano i volumi più bassi, rispettivamente con 57 e 14 unità.
+
+In merito alla durata dell'inserzione, i dati della Figura~\ref{fig:sostenibile_102} mostrano un andamento distribuito. Il valore più frequente si registra per una durata di 6 unità temporali con 70 alloggi, seguita da 1 unità (66) e 7 unità (65). La frequenza minore si osserva per la durata di 2 unità temporali, che conta 29 alloggi.
+\end{multicols}
+% END: sostenibile_prosa (auto-generated)
+
+% BEGIN: sostenibile_figure (auto-generated)
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        ybar,
+        width=\textwidth,
+        height=7.5cm,
+        bar width=25pt,
+        ylabel={Conteggio},
+        xlabel={Numero di locali},
+        xtick={1,2,3,4,5,6,7,8},
+        xticklabels={
+            {1 - 1.5},
+            {2 - 2.5},
+            {3 - 3.5},
+            {4 - 4.5},
+            {5 - 5.5},
+            {6 - 6.5},
+            {7 - 7.5},
+            {>=  8}
+        },
+        xticklabel style={font=\scriptsize, rotate=35, anchor=east},
+        nodes near coords, every node near coord/.append style={font=\scriptsize, anchor=south, yshift=1pt}, clip mode=individual, 
+    ]
+    \addplot[fill=color1] table [x=NrLocali, y=Conteggio, col sep=comma] {data/sostenibile_104.csv};
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Alloggi in offerta a pigione sostenibile per nr locali — 2024}
+    \label{fig:sostenibile_104}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \pgfplotstableread[col sep=comma]{data/sostenibile_118.csv}\sostenibilecomuni
+    \begin{tikzpicture}
+    \begin{axis}[
+        xbar,
+        width=\textwidth,
+        height=8.5cm,
+        bar width=9.0pt,
+        enlarge y limits=0.18,
+        xlabel={Conteggio},
+        xmin=0,
+        ytick=data,
+        yticklabels from table={\sostenibilecomuni}{Comune},
+        y dir=reverse,
+        yticklabel style={font=\footnotesize},
+        nodes near coords, every node near coord/.append style={font=\scriptsize, anchor=west, xshift=2pt, /pgf/number format/fixed, /pgf/number format/precision=1}, clip mode=individual, 
+    ]
+    \addplot[fill=color2] table [x=Conteggio, y expr=\coordindex] {\sostenibilecomuni};
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Alloggi in offerta a pigione sostenibile — 2024}
+    \label{fig:sostenibile_118}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        ybar,
+        width=\textwidth,
+        height=7.5cm,
+        bar width=32pt,
+        ylabel={Conteggio},
+        symbolic x coords={Lugano,Locarno,Bellinzona,Mendrisio,Tre Valli},
+        xtick=data,
+        nodes near coords, every node near coord/.append style={font=\scriptsize, anchor=south, yshift=1pt}, clip mode=individual, 
+    ]
+    \addplot[fill=color3] table [x=Regione, y=Conteggio, col sep=comma] {data/sostenibile_143.csv};
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Alloggi in offerta a pigione sostenibile — 2024}
+    \label{fig:sostenibile_143}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        ybar,
+        width=\textwidth,
+        height=7.5cm,
+        bar width=22pt,
+        ylabel={Conteggio},
+        xlabel={Durata d'inserzione},
+        xtick=data,
+        nodes near coords, every node near coord/.append style={font=\scriptsize, anchor=south, yshift=1pt}, clip mode=individual, 
+    ]
+    \addplot[fill=color4] table [x=DurataInserzione, y=Conteggio, col sep=comma] {data/sostenibile_102.csv};
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Durata inserzioni per nr di giorni — 2024}
+    \label{fig:sostenibile_102}
+\end{figure}
+% END: sostenibile_figure (auto-generated)
+
+\FloatBarrier
+% BEGIN: scompenso_prosa (auto-generated)
+\section{Scompenso di pigione sostenibile}
+
+\begin{multicols}{2}
+L'analisi dello scompenso di pigione sostenibile nel periodo 2021–2024 permette di osservare l'evoluzione di questo indicatore a livello cantonale e la sua distribuzione territoriale in base alla tipologia di alloggio.
+
+A livello aggregato, come riportato nella Figura~\ref{fig:scompenso_87}, si registra un incremento dei valori per entrambi i segmenti analizzati nell'ultimo anno di riferimento. Per la categoria AB, lo scompenso di pigione sostenibile è passato da 1507.5 nel 2023 a 1693.0 nel 2024, evidenziando un aumento significativo pari al 12.3\%. Parallelamente, per la categoria CD, il valore è salito da 5299.0 nel 2023 a 5547.0 nel 2024, con una crescita significativa del 4.7\%.
+
+L'analisi territoriale e per segmento, illustrata nella Figura~\ref{fig:scompenso_136}, mostra un andamento eterogeneo tra le diverse regioni e tipologie di superficie. Si osserva che i valori più elevati di scompenso di pigione sostenibile si concentrano costantemente nella regione di Lugano per tutte le categorie dimensionali considerate: 2674.0 per gli alloggi da 2-2.5 locali (50-70 m²), 1739.0 per quelli da 3-3.5 locali (70-90 m²) e 657.0 per gli alloggi da 4-4.5 locali (90-110 m²). All'estremità opposta, la regione delle Tre Valli registra i valori più bassi, con 59.0 per la tipologia 2-2.5 locali (50-70 m²), 37.0 per quella 3-3.5 locali (70-90 m²) e 23.0 per la tipologia 4-4.5 locali (90-110 m²).
+
+Si evidenzia inoltre un pattern decrescente all'aumentare della dimensione dell'alloggio in tutte le regioni. Ad esempio, a Bellinzona lo scompenso di pigione sostenibile scende da 1126.0 per gli alloggi da 2-2.5 locali (50-70 m²) a 431.0 per quelli da 4-4.5 locali (90-110 m²), mentre a Locarno si osserva una riduzione da 1374.0 per la tipologia 2-2.5 locali (50-70 m²) a 325.0 per quella 4-4.5 locali (90-110 m²). Situazione analoga si riscontra nel Mendrisio, dove l'indicatore passa da 467.0 per gli alloggi più piccoli a 153.0 per quelli più grandi.
+\end{multicols}
+% END: scompenso_prosa (auto-generated)
+
+\begin{table*}[htbp]
+    \centering
+    \footnotesize
+    \begin{tabular}{cccccc}
+        & \multicolumn{5}{c}{Numero di persone dell'economia domestica} \\
+        \multirow{-2}{*}{Scenario} & \cellcolor[HTML]{F9E79F}1 & \cellcolor[HTML]{F9E79F}2 & \cellcolor[HTML]{F9E79F}3 & \cellcolor[HTML]{F9E79F}4 & \cellcolor[HTML]{F9E79F}5 \\
+        A & 40~$m^2$ & 50~$m^2$ & 60~$m^2$ & 70~$m^2$ & 80~$m^2$ \\
+        \rowcolor[HTML]{FEF8DE}
+        B & 50~$m^2$ & 60~$m^2$ & 70~$m^2$ & 80~$m^2$ & 90~$m^2$ \\
+        C & 60~$m^2$ & 70~$m^2$ & 80~$m^2$ & 90~$m^2$ & 100~$m^2$ \\
+        \rowcolor[HTML]{FEF8DE}
+        D & 70~$m^2$ & 80~$m^2$ & 90~$m^2$ & 100~$m^2$ & 110~$m^2$ \\
+    \end{tabular}
+    \caption{Superficie minima garantita al variare degli scenari analizzati (A--B--C--D) e della dimensione dell'economia domestica (1--2--3--4--5 persone).}
+    \label{table_1}
+\end{table*}
+
+% BEGIN: scompenso_figure (auto-generated)
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        width=\textwidth,
+        height=7.5cm,
+        enlarge y limits={0.14},
+        xlabel={Anno},
+        ylabel={Scompenso [CHF]},
+        xtick=data,
+        yticklabel style={/pgf/number format/fixed, /pgf/number format/1000 sep={\,}},
+        legend columns=2,
+        legend style={at={(0.5,-0.36)}, anchor=north, font=\footnotesize},
+        xticklabel style={/pgf/number format/1000 sep=},
+        clip mode=individual,
+        nodes near coords,
+        every node near coord/.append style={font=\scriptsize, anchor=south, yshift=4pt, /pgf/number format/fixed, /pgf/number format/precision=0, /pgf/number format/1000 sep={\,}},
+    ]
+    \addplot[color=color1, mark=*, very thick] table [x=Anno, y=AB, col sep=comma] {data/scompenso_87.csv};
+    \addplot[color=color2, mark=square*, very thick] table [x=Anno, y=CD, col sep=comma] {data/scompenso_87.csv};
+    \legend{Scenario AB, Scenario CD}
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Scompenso di pigione sostenibile cantonale annuale medio per scenari AB e CD}
+    \label{fig:scompenso_87}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        ybar,
+        width=\textwidth,
+        height=8cm,
+        bar width=11.0pt,
+        enlarge x limits=0.25,
+        ylabel={Scompenso [CHF]},
+        symbolic x coords={2-2.5 locali (50-70m²),3-3.5 locali (70-90m²),4-4.5 locali (90-110m²)},
+        xtick=data,
+        xticklabels={
+            {2-2.5 locali\\(50-70m²)},
+            {3-3.5 locali\\(70-90m²)},
+            {4-4.5 locali\\(90-110m²)}
+        },
+        xticklabel style={font=\scriptsize, align=center},
+        legend columns=3,
+        legend style={at={(0.5,-0.34)}, anchor=north, font=\footnotesize},
+        nodes near coords, every node near coord/.append style={font=\tiny, rotate=90, anchor=west, /pgf/number format/fixed, /pgf/number format/precision=0, /pgf/number format/1000 sep={'}}, clip mode=individual, 
+    ]
+    \addplot[fill=colorLugano, bar shift=-22.0pt] table [x=Superficie, y=Lugano, col sep=comma] {data/scompenso_136.csv}; \addplot[fill=colorLocarno, bar shift=-11.0pt] table [x=Superficie, y=Locarno, col sep=comma] {data/scompenso_136.csv}; \addplot[fill=colorBellinzona, bar shift=0.0pt] table [x=Superficie, y=Bellinzona, col sep=comma] {data/scompenso_136.csv}; \addplot[fill=colorMendrisio, bar shift=11.0pt] table [x=Superficie, y=Mendrisio, col sep=comma] {data/scompenso_136.csv}; \addplot[fill=colorTreValli, bar shift=22.0pt] table [x=Superficie, y={Tre Valli}, col sep=comma] {data/scompenso_136.csv};
+    \legend{Lugano, Locarno, Bellinzona, Mendrisio, Tre Valli}
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Scompenso annuo di pigione sostenibile regionali per dimensione dell unità — (2024) — scenario CD}
+    \label{fig:scompenso_136}
+\end{figure}
+% END: scompenso_figure (auto-generated)
+
+% BEGIN: conclusione_prosa (auto-generated)
+\section{Conclusioni}
+
+\begin{multicols}{2}
+Il presente studio ha avuto come obiettivo la determinazione dello scompenso di pigione sostenibile per l'annualità 2025. L'analisi è stata condotta integrando i dati del mercato locativo offerto (2021-2025) forniti da Wüest \& Partner AG, i dati del mercato locativo praticato (2021-2025) dell'Ufficio federale di statistica e le statistiche relative al reddito (2022) dell'Amministrazione federale delle contribuzioni.
+
+Per quanto concerne il mercato locativo offerto, si è osservata una crescita del valore mediano cantonale tra il 2021 (206.0) e il 2026 (226.0), nonostante una flessione marginale dello -0.88\% nell'ultimo anno. Parallelamente, si è registrata una contrazione significativa del volume dell'offerta (-24.60\%) e un incremento significativo della durata media d'inserzione (+16.82\%) tra il 2025 e il 2026. Nel mercato locativo praticato, il prezzo medio per m² a livello cantonale ha subito un incremento moderato del 2.16\% tra il 2022 e il 2023, sebbene l'andamento regionale nel 2023 abbia mostrato flessioni significative nelle Tre Valli (-9.97\%) e a Lugano (-3.30\%). Il reddito per economia domestica è risultato in crescita moderata tra il 2021 e il 2022 (+2.28\%), con una variazione significativa registrata nella regione di Lugano (+4.05\%).
+
+In tale scenario, il tasso di sforzo è risultato sistematicamente più elevato nel mercato offerto rispetto a quello praticato. I valori più alti si sono riscontrati a Locarno (tasso offerto 24.6\%), mentre l'incidenza minore è stata registrata a Mendrisio (tasso offerto 19.5\%). Lo scompenso di pigione sostenibile nel 2024 ha mostrato incrementi significativi per entrambe le categorie analizzate: +12.3\% per la categoria AB e +4.7\% per la categoria CD. L'offerta di alloggi a pigione sostenibile risulta concentrata prevalentemente nella regione di Lugano, che detiene il 49.9\% del totale, con una prevalenza tipologica di unità tra i 3 e i 4.5 locali.
+
+L'evoluzione non risulta tuttavia omogenea sul territorio. Lugano si conferma l'area con i redditi più elevati e il maggior volume di offerta sostenibile, ma anche quella con i valori di scompenso di pigione più alti. Al contrario, le Tre Valli presentano i volumi di offerta sostenibile più contenuti (4.1\%) e i valori di scompenso più bassi.
+
+Occorre tuttavia menzionare che l'analisi risente di alcune asincronie temporali tra le fonti, in particolare per i dati relativi al reddito, aggiornati all'annualità 2022. Parallelamente, si segnala che è in fase di sviluppo una piattaforma di monitoraggio basata su Metabase per la futura consultazione dei dati.
+\end{multicols}
+% END: conclusione_prosa (auto-generated)
+
+% BEGIN: glossario_prosa (auto-generated)
+\section{Glossario}
+
+\begin{multicols}{2}
+Il presente glossario definisce i termini tecnici, gli indicatori e le fonti di dati utilizzati nel rapporto. L'obiettivo è fornire un quadro concettuale univoco per l'interpretazione dei risultati dell'analisi sullo scompenso dei canoni locativi nel Canton Ticino.
+
+\subsection{Termini del mercato locativo}
+
+\textbf{Canone locativo (pigione)} \\
+\textit{Categoria: Indicatore} \\
+Definizione: Importo mensile corrisposto dal conduttore al locatore per l'utilizzo di un alloggio. Nel report, il canone è analizzato sia nella sua dimensione di offerta che in quella di pratica. $\rightarrow$ cfr. Mercato locativo offerto.
+
+\textbf{Canone mediano} \\
+\textit{Categoria: Indicatore} \\
+Definizione: Valore che divide la distribuzione dei canoni locativi in due parti uguali, tale per cui il 50\% degli alloggi ha un canone inferiore o uguale a tale valore e il 50\% un canone superiore. Viene utilizzato per mitigare l'effetto di valori estremi (outlier) rispetto alla media aritmetica.
+
+\textbf{Durata media d'inserzione} \\
+\textit{Categoria: Indicatore} \\
+Definizione: Tempo medio, espresso in giorni, durante il quale un annuncio immobiliare rimane attivo sul mercato prima di essere rimosso o locato. Rappresenta un indicatore della velocità di assorbimento dell'offerta locativa. $\rightarrow$ cfr. Mercato locativo offerto.
+
+\textbf{Inserzione / annuncio immobiliare} \\
+\textit{Categoria: Concetto di mercato} \\
+Definizione: Comunicazione pubblica attraverso la quale un proprietario o un mandatario mette a disposizione un alloggio per la locazione, indicandone le caratteristiche e il canone richiesto. Costituisce l'unità base per l'analisi del mercato offerto.
+
+\textbf{Mercato locativo offerto} \\
+\textit{Categoria: Concetto di mercato} \\
+Definizione: Insieme degli alloggi messi a disposizione per la locazione in un determinato periodo, basato sui dati di pubblicazione (annunci). Questo mercato riflette le aspettative dei locatori e i prezzi correnti di ingresso. $\rightarrow$ cfr. Mercato locativo offerto.
+
+\textbf{Mercato locativo praticato} \\
+\textit{Categoria: Concetto di mercato} \\
+Definizione: Insieme dei canoni effettivamente applicati nei contratti di locazione esistenti. A differenza del mercato offerto, questo dato rappresenta la realtà contrattuale consolidata e storica. $\rightarrow$ cfr. Mercato locativo praticato.
+
+\textbf{Prezzo medio al metro quadrato (CHF/m²)} \\
+\textit{Categoria: Indicatore} \\
+Definizione: Valore ottenuto dividendo il canone locativo mensile per la superficie netta dell'alloggio. Permette di confrontare l'incidenza economica di alloggi con dimensioni diverse. L'unità di misura è il franco svizzero per metro quadrato.
+
+\subsection{Indicatori di accessibilità abitativa}
+
+\textbf{Pigione sostenibile} \\
+\textit{Categoria: Indicatore} \\
+Definizione: Canone locativo massimo che un'economia domestica può sostenere senza superare una soglia critica di pressione finanziaria sul reddito. È il valore di riferimento per determinare l'accessibilità economica di un alloggio.
+
+\textbf{Reddito equivalente per economia domestica} \\
+\textit{Categoria: Indicatore} \\
+Definizione: Reddito annuo disponibile attribuito a un nucleo familiare (economia domestica), espresso in kCHF/anno. Il dato è derivato dalle statistiche dell'imposta federale diretta per riflettere la capacità contributiva reale. $\rightarrow$ cfr. Reddito.
+
+\textbf{Scompenso di pigione sostenibile} \\
+\textit{Categoria: Indicatore} \\
+Definizione: Differenza monetaria tra il canone locativo di mercato (offerto o praticato) e la pigione sostenibile calcolata per una specifica tipologia di economia domestica. Un valore positivo indica che l'alloggio è meno accessibile rispetto alle capacità finanziarie del nucleo. $\rightarrow$ cfr. Scompenso di pigione sostenibile.
+
+\textbf{Tasso di sforzo} \\
+\textit{Categoria: Indicatore} \\
+Definizione: Rapporto percentuale tra la spesa annua per l'alloggio (canone locativo) e il reddito annuo dell'economia domestica. È l'indicatore principale per misurare l'incidenza dei costi abitativi sul budget familiare. $\rightarrow$ cfr. Tasso di sforzo.
+
+\subsection{Scenari e metodologia}
+
+\textbf{Scenario AB} \\
+\textit{Categoria: Concetto metodologico} \\
+Definizione: Modello di calcolo dello scompenso applicato a un primo segmento di parametri di sostenibilità. Rappresenta una specifica configurazione di reddito e superficie per l'analisi dell'accessibilità. $\rightarrow$ cfr. Scompenso di pigione sostenibile.
+
+\textbf{Scenario CD} \\
+\textit{Categoria: Concetto metodologico} \\
+Definizione: Modello di calcolo dello scompenso applicato a un secondo segmento di parametri, distinto dallo scenario AB. Viene utilizzato per analizzare l'impatto della sostenibilità su diverse fasce di reddito o tipologie abitative. $\rightarrow$ cfr. Scompenso di pigione sostenibile.
+
+\textbf{Superficie minima garantita} \\
+\textit{Categoria: Concetto metodologico} \\
+Definizione: Metratura minima di alloggio considerata necessaria e dignitosa per una specifica tipologia di economia domestica. Tale valore è utilizzato come base per il calcolo della pigione sostenibile.
+
+\subsection{Tipologie abitative e territoriali}
+
+\textbf{Case plurifamiliari} \\
+\textit{Categoria: Tipologia immobiliare} \\
+Definizione: Edifici progettati per ospitare più nuclei familiari in unità abitative indipendenti (appartamenti). Rappresentano la tipologia prevalente nei centri urbani e nelle aree a maggiore densità. $\rightarrow$ cfr. Mercato locativo praticato.
+
+\textbf{Case unifamiliari} \\
+\textit{Categoria: Tipologia immobiliare} \\
+Definizione: Edifici destinati all'abitazione di un singolo nucleo familiare. In genere presentano una maggiore superficie e sono più diffuse nelle aree periferiche o rurali.
+
+\textbf{Economia domestica} \\
+\textit{Categoria: Tipologia sociale} \\
+Definizione: Unità di analisi composta da una o più persone che condividono l'alloggio e le risorse economiche. Include diverse tipologie: persone sole, coppie senza figli, genitori soli, ecc. $\rightarrow$ cfr. Reddito.
+
+\textbf{Edifici a uso misto o accessorio} \\
+\textit{Categoria: Tipologia immobiliare} \\
+Definizione: Strutture che integrano alloggi residenziali con spazi destinati ad attività commerciali, professionali o artigianali. Sono comuni nei centri storici e nelle zone di interfaccia urbana.
+
+\textbf{Regioni del Canton Ticino} \\
+\textit{Categoria: Tipologia territoriale} \\
+Definizione: Suddivisioni geografiche utilizzate per l'analisi territoriale del rapporto. Le regioni considerate sono: Lugano, Locarno, Bellinzona, Mendrisio e Tre Valli.
+
+\subsection{Fonti e strumenti utilizzati}
+
+\textbf{Amministrazione federale delle contribuzioni (AFC) / Imposta federale diretta (IFD)} \\
+\textit{Categoria: Fonte dati} \\
+Definizione: Organo federale che gestisce la riscossione dell'imposta federale. I dati IFD/AFC sono utilizzati nel report per l'estrazione dei redditi annui per economia domestica. $\rightarrow$ cfr. Introduzione.
+
+\textbf{Metabase} \\
+\textit{Categoria: Strumento} \\
+Definizione: Piattaforma di business intelligence e monitoraggio dei dati in fase di sviluppo. Sarà utilizzata per la visualizzazione interattiva dei risultati di questo studio per il pubblico. $\rightarrow$ cfr. Introduzione.
+
+\textbf{Ufficio federale di statistica (UST) / Rilevazione Strutturale (RS)} \\
+\textit{Categoria: Fonte dati} \\
+Definizione: Organismo statistico federale che conduce la Rilevazione Strutturale (RS) sul parco immobiliare. Fornisce i dati relativi al mercato locativo praticato. $\rightarrow$ cfr. Introduzione.
+
+\textbf{Wüest \& Partner AG} \\
+\textit{Categoria: Fonte dati} \\
+Definizione: Società di consulenza e analisi immobiliare specializzata. Fornisce i dati relativi al mercato locativo offerto (annunci) utilizzati per l'analisi del periodo 2021-2025. $\rightarrow$ cfr. Introduzione.
+\end{multicols}
+% END: glossario_prosa (auto-generated)
+
+\end{document}

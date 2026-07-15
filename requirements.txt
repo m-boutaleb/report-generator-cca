@@ -1,0 +1,7 @@
+pandas
+requests
+google-genai
+fastapi
+uvicorn[standard]
+pydantic
+pymupdf

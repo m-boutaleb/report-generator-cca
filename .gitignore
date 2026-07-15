@@ -1,0 +1,36 @@
+# Local credentials — copy secrets.example.json → secrets.json
+secrets.json
+
+# Generated / local artifacts
+output/
+data/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+.env
+
+# LaTeX build products
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.spl
+*.pdf
+main_chk.*
+main_test.*
+main_build.*
+_preview/
+_chk.log
+_final.log
+_build.log
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

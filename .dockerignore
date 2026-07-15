@@ -1,0 +1,27 @@
+# Build context exclusions for Docker
+.git
+.github
+__pycache__
+*.pyc
+.pytest_cache
+output
+data
+_preview
+secrets.json
+*.pdf
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+main_chk.*
+main_test.*
+main_build.*
+*.spl
+.env
+.venv
+venv
+README.md
+.dockerignore
