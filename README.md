@@ -1,4 +1,4 @@
-# Rapporto Dicembre 2025 — pipeline dati e LaTeX
+# Rapporto Osservatorio Alloggio — pipeline dati e LaTeX
 
 ## Docker / GitHub Container Registry
 
