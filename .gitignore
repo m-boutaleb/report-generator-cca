@@ -1,5 +1,8 @@
 # Local credentials — copy secrets.example.json → secrets.json
 secrets.json
+.env
+.env.*
+!.env.example
 
 # Generated / local artifacts
 output/
@@ -9,7 +12,6 @@ __pycache__/
 .pytest_cache/
 .venv/
 venv/
-.env
 
 # LaTeX build products
 *.aux

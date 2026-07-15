@@ -25,6 +25,40 @@ docker run --rm -p 8000:8000 \
 
 `secrets.json` non è incluso nell’immagine: montalo a runtime (o usa variabili d’ambiente).
 
+### Deploy su server con Docker Compose
+
+Sul server:
+
+```bash
+# 1. Copia i file di deploy (dal repo o da CI)
+#    docker-compose.yml  +  .env.example
+
+cp .env.example .env
+# 2. Compila METABASE_API_KEY e GEMINI_API_KEY in .env
+
+# 3. Login GHCR (se il package è privato)
+# echo $GHCR_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
+
+docker compose pull
+docker compose up -d
+docker compose logs -f report-generator
+```
+
+Healthcheck: `http://<server>:8000/health`  
+API docs: `http://<server>:8000/docs`
+
+Variabili principali (vedi `.env.example`):
+
+| Variabile | Obbligatoria | Descrizione |
+|-----------|--------------|-------------|
+| `METABASE_API_KEY` | sì | Chiave API Metabase per i CSV |
+| `GEMINI_API_KEY` | sì | Chiave Google GenAI (prosa) |
+| `GEMINI_MODEL` | no | Default `gemma-4-31b-it` |
+| `IMAGE_TAG` | no | Tag immagine (`1.0.0`, `latest`, …) |
+| `HOST_PORT` | no | Porta host (default `8000`) |
+
+I volumi `report_data` e `report_output` persistono CSV e ZIP generati.
+
 ## REST API (pipeline completa)
 
 Un’unica chiamata avvia: download CSV → aggiornamento grafici → generazione testo (2 colonne) → compilazione PDF → check `\ref` → ZIP (`main.pdf` + `main.tex`).

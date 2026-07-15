@@ -1,0 +1,42 @@
+# Deploy on the server:
+#   1. cp .env.example .env   && edit values
+#   2. docker compose pull
+#   3. docker compose up -d
+#
+# Image is published by the CI on version tags (e.g. 1.0.0).
+
+services:
+  report-generator:
+    image: ${IMAGE:-ghcr.io/m-boutaleb/report-generator-cca}:${IMAGE_TAG:-1.0.0}
+    container_name: report-generator-cca
+    restart: unless-stopped
+    ports:
+      - "${HOST_PORT:-8000}:8000"
+    env_file:
+      - .env
+    environment:
+      # Force writable texmf scratch dirs inside the container
+      TEXMFHOME: /tmp/texmf-home
+      TEXMFVAR: /tmp/texmf-var
+      TEXMFCONFIG: /tmp/texmf-config
+    volumes:
+      # Persist fetched CSVs and generated artifacts across restarts
+      - report_data:/app/data
+      - report_output:/app/output
+      # Optional: mount a secrets.json instead of (or in addition to) .env
+      # - ./secrets.json:/app/secrets.json:ro
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  report_data:
+  report_output:
