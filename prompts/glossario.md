@@ -53,7 +53,7 @@ Definisci **esclusivamente** i termini elencati sotto, raggruppati per categoria
 - Rilevazione Strutturale (RS) — Ufficio federale di statistica (UST)
 - Imposta federale diretta (IFD) — Amministrazione federale delle contribuzioni (AFC)
 
-Per RS e IFD, integra le informazioni essenziali da `prompts/fonte_rs.md` e `prompts/fonte_ifd.md`.
+Per RS, IFD e offerta Wüest, integra archi temporali e regole da `prompts/fonte_rs.md`, `prompts/fonte_ifd.md` e `prompts/fonte_offerta.md`.
 
 ---
 
@@ -80,10 +80,10 @@ Definizione: [2–4 frasi chiare, in italiano, adattate al contesto del report. 
 
 | Termine                                  | Cosa deve comparire nella definizione                                                                 |
 | ---------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| **Mercato locativo offerto / praticato** | Offerto = annunci; praticato = contratti esistenti (RS)                                               |
-| **Campione RS**                          | Dati non censuari; indicare periodo (es. 2019–2023)                                                   |
+| **Mercato locativo offerto / praticato** | Offerto = annunci Wüest (**2021–2026, giugno**); praticato = contratti RS (**2019–2023**, ultimo pull **2021–2023**) |
+| **Campione RS**                          | Dati non censuari; arco fonte 2019–2023, ultimo pull 2021–2023                                        |
 | **Canone mediano**                       | Valore mediano; nel report spesso in CHF/m² anno                                                      |
-| **Reddito equivalente**                  | kCHF/anno per economia domestica; fonte IFD/AFC                                                       |
+| **Reddito equivalente**                  | kCHF/anno per economia domestica; fonte IFD/AFC, periodo **2017–2022**                               |
 | **Scenario A–D**                         | Tabella superficie minima per 1–5 persone; A = minimo, D = massimo                                    |
 | **Scenario AB / CD**                     | AB = aggregato A e B; CD = aggregato C e D; usati nello scompenso cantonale                           |
 | **Tasso di sforzo**                      | Rapporto % spesa annua alloggio / reddito; praticato vs offerto                                       |

@@ -27,6 +27,14 @@ def save_captions() -> None:
     with open("data/captions.json", "w", encoding="utf-8") as f:
         json.dump(CAPTIONS, f, ensure_ascii=False, indent=2)
 
+
+def sort_by_year(df: pd.DataFrame, column: str = "Anno") -> pd.DataFrame:
+    """Sort rows chronologically for line charts (pgfplots connects rows in file order)."""
+    if column in df.columns:
+        return df.sort_values(column).reset_index(drop=True)
+    first = df.columns[0]
+    return df.sort_values(first).reset_index(drop=True)
+
 # 1. Offerta
 # Cantonale: 112 -> Data (anno), Media di Prezzo Al M² [chf]
 # Regionale: 119 -> Data (anno), Regioni, Media di Prezzo Al M² [chf]
@@ -46,11 +54,15 @@ df_off_tab = get_df(
     "offerta_tabellina",
     "Indicatori medi del mercato locativo offerto a livello cantonale",
 )
+# Metabase content-disposition filename wrongly says "praticato" for this card.
+CAPTIONS["offerta_tabellina"] = "Indicatori medi del mercato locativo offerto a livello cantonale"
 df_off_cant = df_off_cant.rename(columns={df_off_cant.columns[0]: 'Anno', df_off_cant.columns[1]: 'Cantonale'})
 df_off_reg = df_off_reg.rename(columns={df_off_reg.columns[0]: 'Anno', df_off_reg.columns[1]: 'Regione', df_off_reg.columns[2]: 'Prezzo'})
 pivot_off_reg = df_off_reg.pivot(index='Anno', columns='Regione', values='Prezzo').reset_index()
 off_merged = pd.merge(df_off_cant, pivot_off_reg, on='Anno')
+off_merged = sort_by_year(off_merged)
 off_merged.to_csv('data/offerta_line.csv', index=False)
+df_off_tab = sort_by_year(df_off_tab, column=df_off_tab.columns[0])
 df_off_tab.to_csv('data/offerta_tabellina.csv', index=False)
 
 
@@ -174,6 +186,7 @@ df_78.columns = ['Anno', 'Cantonale']
 df_84_77.columns = ['Regione', 'Anno', 'Media']
 pivot_84 = df_84_77.pivot(index='Anno', columns='Regione', values='Media').reset_index()
 merged_reddito = pd.merge(df_78, pivot_84, on='Anno')
+merged_reddito = sort_by_year(merged_reddito)
 merged_reddito.to_csv('data/reddito_line.csv', index=False)
 
 # Stacked bar fasce reddito: 75
@@ -283,6 +296,7 @@ df_87 = get_df(
 )
 df_87.columns = ["Anno", "Scenario", "Scompenso"]
 pivot_87 = df_87.pivot(index="Anno", columns="Scenario", values="Scompenso").reset_index()
+pivot_87 = sort_by_year(pivot_87)
 pivot_87.to_csv("data/scompenso_87.csv", index=False)
 
 # Barre raggruppate: scompenso per regione e metratura

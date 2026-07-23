@@ -64,30 +64,43 @@ Non devono essere formulate raccomandazioni di policy come anche commenti interp
 
 
 
-3bis. FONTI DATI — RS E IMPOSTA FEDERALE
+3bis. FONTI DATI, ARCHI TEMPORALI E REGOLE REDAZIONALI
 
-Quando redigi sezioni che usano dati del mercato locativo praticato o del reddito, rispetta le regole seguenti (dettaglio in `prompts/fonte_rs.md` e `prompts/fonte_ifd.md`).
+Quando redigi sezioni analitiche, rispetta archi temporali e fonti sotto indicati (dettaglio in `prompts/fonte_rs.md`, `prompts/fonte_ifd.md`, `prompts/fonte_offerta.md`).
+
+**Archi temporali — riepilogo obbligatorio**
+
+| Fonte / sezione | Arco nel report | Note |
+|-----------------|-----------------|------|
+| Mercato locativo **offerto** (Wüest) | **2021–2026 (giugno)** | Ultimo dato: giugno 2026 |
+| Mercato locativo **praticato** (RS/UST) | arco fonte **2019–2023**; **ultimo pull 2021–2023** | Campione; confronti su 2021–2023 |
+| **Reddito** (IFD/AFC) | **2017–2022** | Ultima annualità: 2022 |
+
+Non mescolare periodi tra fonti diverse senza segnalarlo. L'asincronia (es. reddito 2022 vs offerta giugno 2026) va menzionata quando rilevante.
+
+**Mercato locativo offerto — Wüest & Partner AG**
+* Fonte: annunci di locazione (mercato offerto).
+* Periodo: **2021–2026 (giugno)**.
+* CSV: `offerta_line`, `offerta_tabellina`.
 
 **Mercato locativo praticato — Rilevazione Strutturale (RS, UST)**
-* Fonte: Rilevazione Strutturale dell'Ufficio federale di statistica (UST).
-* Contenuto: canoni effettivamente praticati, tipologia edificio, epoca di costruzione, indicatori medi del campione (superficie, locali, persone).
-* Aggiornamento: rilevazione annuale; nel testo indicare sempre il periodo/annualità coperti dal CSV (es. campione 2019–2023).
-* Vincolo: trattare i dati come **campione**, non come censimento dell'intera popolazione cantonale.
-* CSV collegati: `praticato_139`, `praticato_60`, `praticato_62`, `praticato_146`.
+* Fonte: canoni effettivamente praticati, tipologia edificio, epoca di costruzione, indicatori del campione.
+* Arco fonte: **2019–2023**; **ultimo pull dati: 2021–2023** (periodo effettivo dei CSV e dei confronti).
+* Vincolo: trattare i dati come **campione**, non censimento dell'intera popolazione cantonale.
+* CSV: `praticato_139`, `praticato_60`, `praticato_62`, `praticato_146`.
 
 **Reddito — Imposta federale diretta (IFD, AFC)**
-* Fonte: statistiche dell'imposta federale diretta (IFD), Amministrazione federale delle contribuzioni (AFC).
-* Contenuto: reddito per economia domestica (kCHF/anno) e distribuzione per fasce di reddito.
-* Aggiornamento: basato sulle pubblicazioni ufficiali AFC; segnalare l'annualità disponibile (es. 2022) e l'eventuale ritardo rispetto ad altre fonti.
-* CSV collegati: `reddito_line`, `reddito_75`.
+* Fonte: reddito per economia domestica (kCHF/anno) e fasce di reddito.
+* Periodo: **2017–2022**; ultima annualità **2022**.
+* CSV: `reddito_line`, `reddito_75`.
 
-**Altre fonti (non confonderle con RS/IFD)**
-* Mercato locativo offerto: Wüest & Partner AG (`offerta_line`, `offerta_tabellina`).
-* Offerta a pigione sostenibile, tasso di sforzo, scompenso: indicatori calcolati/elaborati per il report (Metabase / team Osservatorio).
+**Indicatori elaborati internamente**
+* Tasso di sforzo, scompenso di pigione sostenibile, offerta a pigione sostenibile: calcoli/elaborazioni del team Osservatorio (Metabase).
 
-Quando citi la provenienza dei dati nel testo analitico, usa formulazioni come:
-* «…basato su un campione di dati della Rilevazione Strutturale (UST)…»
-* «…secondo le statistiche IFD/AFC relative all'annualità …»
+Quando citi la provenienza nel testo analitico:
+* «…mercato locativo offerto (Wüest & Partner), periodo 2021–2026…»
+* «…campione RS (UST), con dati aggiornati al 2021–2023…»
+* «…statistiche IFD/AFC, periodo 2017–2022…»
 
 
 

@@ -22,13 +22,13 @@ Istruzione: Genera esclusivamente il testo dell'introduzione del report seguendo
 #### [Blocco 2: Tracciabilità degli Input (Fonti e Aggiornamenti)]
 
 •	Contenuto: Spiega come si è arrivati all'output del Blocco 1 elencando le basi dati utilizzate. Distingui chiaramente le diverse fonti informative o i sotto-mercati analizzati, specificando per ciascuno l'anno di aggiornamento dei dati (es. dati correnti vs dati storici).
-•	Dati di input: offerta mercato locativo (2021-2025), praticato (2021-2025), reddito derivante da imposta federale (2022), tasso di sforzo che è un calcolo (affitto offerto o praticato diviso il reddito), scompenso di pigione sostenibile anche questo è una metodologia di calcolo e infine offerta di pigione sostenibile disponibile attualmente sul mercato locativo offerto. 
+•	Dati di input: offerta mercato locativo (**2021–2026, giugno**), praticato RS (**arco fonte 2019–2023; ultimo pull 2021–2023**), reddito imposta federale (**2017–2022**, ultima annualità 2022), tasso di sforzo (calcolo: affitto offerto o praticato diviso il reddito), scompenso di pigione sostenibile (metodologia di calcolo), offerta di pigione sostenibile sul mercato locativo offerto.
 
 #### [Blocco 3: Trasparenza Metodologica (Caveat/Vincolo)]
 
 •	Contenuto: Inserisci una nota di precisione tecnica riguardo a eventuali limitazioni temporali o asimmetrie di una specifica componente di dati (es. dati non aggiornati o fermi a un'annualità precedente). Menziona la causa (es. in attesa di fornitura da enti terzi) per garantire trasparenza.
 
-•	Dati di input: imposta federale viene aggiornata in base alle pubblicazioni fatte sul sito ufficiale e l'ultimo dati disponibile è quello del 2022, invece per rs (praticato) l'ultimo dato disponibile viene rilevato annualmente, mentre òlocativo disponibile l'ultimo dato più recente. Scompenso invece viene elaborato internamente dal team di ricerca osservatorio cantonale dell'alloggio durante la stesura di questo rapporto. 
+•	Dati di input: reddito IFD aggiornato alle pubblicazioni AFC (**2017–2022**, ultimo dato 2022); RS (praticato) rilevato annualmente (**arco 2019–2023**, ultimo pull **2021–2023**); mercato locativo offerto Wüest con ultimo dato **giugno 2026** (**2021–2026**). Scompenso elaborato internamente dal team Osservatorio durante la stesura del rapporto. Segnalare l'asincronia tra le fonti quando rilevante.
 
 #### [Blocco 4: Sviluppo Parallelo e Roadmap dello Strumento]
 
@@ -65,9 +65,9 @@ Non per forza devi farlo uguale a questo esempio di seguito riportato, ma rimane
 
 Il presente rapporto illustra i risultati della stima dello scompenso di pigione sostenibile a livello cantonale e regionale per l'anno 2024.
 
-A tal fine, sono stati aggiornati i dati descrittivi del mercato locativo offerto (anno 2024), del mercato locativo praticato (Rilevazione Strutturale,con dati fino al 2023) e le statistiche demografiche STATPOP relative alla composizione delle economie domestiche (anno 2023).
+A tal fine, sono stati aggiornati i dati del mercato locativo offerto (Wüest & Partner, **2021–2026, giugno**), del mercato locativo praticato (Rilevazione Strutturale UST, **ultimo pull 2021–2023**, arco fonte 2019–2023) e del reddito (imposta federale, **2017–2022**).
 
-È opportuno precisare che i dati sul reddito, elaborati sulla base dell'imposta federale, rimangono allineati all'annualità 2019. Tale componente potrebbe essere prossimamente aggiornata grazie ad una fornitura da parte dell'Ufficio cantonale di statistica, non ancora finalizzata al momento della stesura del presente rapporto.
+È opportuno precisare che le diverse fonti non sono allineate temporalmente (es. reddito fermo al 2022, offerta aggiornata a giugno 2026): tale asincronia va tenuta presente nell'interpretazione dei risultati.
 
 Parallelamente al pre-processamento e all'analisi dei dati, il lavoro ha compreso un aggiornamento estensivo del prototipo di piattaforma di monitoraggio, finalizzato a ottimizzare la visualizzazione, la trasmissione e la condivisione dei risultati. Una sezione del presente documento è quindi dedicata alla descrizione delle principali modifiche implementate a livello di struttura, logica e contenuti informativi.
 

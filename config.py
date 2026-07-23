@@ -66,6 +66,7 @@ FONTE_IFD_PATH = ROOT / "prompts" / "fonte_ifd.md"
 INTRODUZIONE_PROMPT_PATH = ROOT / "prompts" / "prompt_introduzione_v1.md"
 CONCLUSIONE_PROMPT_PATH = ROOT / "prompts" / "prompt_conclusione_v3.md"
 GLOSSARIO_PROMPT_PATH = ROOT / "prompts" / "glossario.md"
+FONTE_OFFERTA_PATH = ROOT / "prompts" / "fonte_offerta.md"
 TEX_PATH = ROOT / "main.tex"
 OUTPUT_DIR = ROOT / "output"
 
