@@ -6,6 +6,7 @@ Il tuo compito è generare un capitolo **Glossario** da aggiungere al report.
 
 ---
 
+
 ## ISTRUZIONI
 
 ### 1. Termini obbligatori
