@@ -60,10 +60,12 @@ METABASE_API_KEY = get_secret("METABASE_API_KEY")
 
 GEMINI_MODEL = get_secret("GEMINI_MODEL", "gemma-4-31b-it")
 
-PROMPT_PATH = ROOT / "prompts" / "prompt_EA.txt"
+PROMPT_PATH = ROOT / "prompts" / "prompt_EA.md"
+FONTE_RS_PATH = ROOT / "prompts" / "fonte_rs.md"
+FONTE_IFD_PATH = ROOT / "prompts" / "fonte_ifd.md"
 INTRODUZIONE_PROMPT_PATH = ROOT / "prompts" / "prompt_introduzione_v1.md"
 CONCLUSIONE_PROMPT_PATH = ROOT / "prompts" / "prompt_conclusione_v3.md"
-GLOSSARIO_PROMPT_PATH = ROOT / "prompts" / "gloassario.md"
+GLOSSARIO_PROMPT_PATH = ROOT / "prompts" / "glossario.md"
 TEX_PATH = ROOT / "main.tex"
 OUTPUT_DIR = ROOT / "output"
 

@@ -64,6 +64,35 @@ Non devono essere formulate raccomandazioni di policy come anche commenti interp
 
 
 
+3bis. FONTI DATI — RS E IMPOSTA FEDERALE
+
+Quando redigi sezioni che usano dati del mercato locativo praticato o del reddito, rispetta le regole seguenti (dettaglio in `prompts/fonte_rs.md` e `prompts/fonte_ifd.md`).
+
+**Mercato locativo praticato — Rilevazione Strutturale (RS, UST)**
+* Fonte: Rilevazione Strutturale dell'Ufficio federale di statistica (UST).
+* Contenuto: canoni effettivamente praticati, tipologia edificio, epoca di costruzione, indicatori medi del campione (superficie, locali, persone).
+* Aggiornamento: rilevazione annuale; nel testo indicare sempre il periodo/annualità coperti dal CSV (es. campione 2019–2023).
+* Vincolo: trattare i dati come **campione**, non come censimento dell'intera popolazione cantonale.
+* CSV collegati: `praticato_139`, `praticato_60`, `praticato_62`, `praticato_146`.
+
+**Reddito — Imposta federale diretta (IFD, AFC)**
+* Fonte: statistiche dell'imposta federale diretta (IFD), Amministrazione federale delle contribuzioni (AFC).
+* Contenuto: reddito per economia domestica (kCHF/anno) e distribuzione per fasce di reddito.
+* Aggiornamento: basato sulle pubblicazioni ufficiali AFC; segnalare l'annualità disponibile (es. 2022) e l'eventuale ritardo rispetto ad altre fonti.
+* CSV collegati: `reddito_line`, `reddito_75`.
+
+**Altre fonti (non confonderle con RS/IFD)**
+* Mercato locativo offerto: Wüest & Partner AG (`offerta_line`, `offerta_tabellina`).
+* Offerta a pigione sostenibile, tasso di sforzo, scompenso: indicatori calcolati/elaborati per il report (Metabase / team Osservatorio).
+
+Quando citi la provenienza dei dati nel testo analitico, usa formulazioni come:
+* «…basato su un campione di dati della Rilevazione Strutturale (UST)…»
+* «…secondo le statistiche IFD/AFC relative all'annualità …»
+
+
+
+
+
 4\. LINEE GUIDA STILISTICHE
 
 
@@ -228,7 +257,7 @@ Non inserire commenti meta-testuali.
 
 
 
-10\. FORMATO DI OUTPUT
+10\. FORMATO DI OUTPUT E NUMERI
 
 
 
@@ -242,9 +271,39 @@ Evita la creazione di sottocapitoli, salvo necessità motivata dalla struttura d
 
 Non inserire spiegazioni, commenti o testo fuori dal corpo del rapporto.
 
-Quando si parla di reddito ricordati di usare l'unita di misura giusta, quindi kCHF/anno per economia domestica.  
+Quando si parla di reddito usa sempre **kCHF/anno per economia domestica**.
 
-Quando devi usare le cifre decimali devi usare come seperatore il punto e non la virgola. Poi per seperare le migliaia usa l'apostrofo. 
+**Unità di misura obbligatorie**
 
-Inoltre assicurati di usare m² e non mq
+Ogni valore numerico nel testo deve essere accompagnato dall'unità corretta. Non lasciare numeri «nudi».
+
+| Tipo di dato | Unità nel testo |
+|--------------|-----------------|
+| Canone / prezzo al m² | CHF/m² (o CHF/m² anno se annuale) |
+| Canone / scompenso assoluto | CHF |
+| Superficie | m² (usa m², non mq) |
+| Reddito | kCHF/anno per economia domestica |
+| Variazioni percentuali | % (es. +2.2 %) |
+| Durata inserzione | giorni |
+| Conteggi alloggi / osservazioni | alloggi (es. 8'051 alloggi) |
+| Quota strutturale | % |
+
+**Regole di formattazione numerica**
+
+1. **Mai** scrivere decimali fittizi: usa `206` e non `206.0`; usa `228` e non `228.0`.
+2. **Al massimo una cifra decimale** quando il dato la richiede: `27.8 %`, `90.4 m²`, `243.8 CHF/m²`, `3.1 locali`.
+3. **Separatore decimale**: punto (`.`). **Separatore migliaia**: apostrofo (`'`): `10'678`, `21'865`.
+4. **Percentuali**: spazio prima del simbolo `%` in LaTeX: `2.2\%` nel sorgente, «2.2 %» nel testo generato.
+5. **Punti percentuali** (differenze tra due tassi): scrivi «2.5 punti percentuali», non confondere con «2.5 %».
+6. Se citi un valore da CSV, arrotonda in modo coerente con la scala del dato (superficie 1 decimale, percentuali 1 decimale, conteggi interi).
+
+**Esempi**
+
+| Evitare | Preferire |
+|---------|-----------|
+| da 206.0 nel 2021 a 226.0 nel 2026 | da 206 CHF/m² nel 2021 a 226 CHF/m² nel 2026 |
+| superficie 90.44 | superficie 90.4 m² |
+| incremento del 2.16 | incremento del 2.2 % |
+| 10678 unità | 10'678 alloggi |
+| 74.0 kCHF | 74 kCHF/anno per economia domestica |
 

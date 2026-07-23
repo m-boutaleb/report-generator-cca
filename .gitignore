@@ -7,11 +7,15 @@ secrets.json
 # Generated / local artifacts
 output/
 data/
+csv_data/
 __pycache__/
 *.pyc
 .pytest_cache/
 .venv/
 venv/
+
+# Local reference spreadsheets (IFD source docs, etc.)
+*.xlsx
 
 # LaTeX build products
 *.aux

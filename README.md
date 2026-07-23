@@ -156,7 +156,7 @@ Output:
 - Backup: `output/offerta_prosa_last.tex`
 - Iniezione idempotente in `main.tex` tra `% BEGIN: offerta_prosa` e `% END: offerta_prosa`
 
-Dati usati: `data/offerta_line.csv`, `data/offerta_tabellina.csv`, istruzioni in `prompts/prompt_EA.txt`.
+Dati usati: `data/offerta_line.csv`, `data/offerta_tabellina.csv`, istruzioni in `prompts/prompt_EA.md`.
 
 ## test_google_ai.py (Gemini — provider cloud per la prosa)
 
