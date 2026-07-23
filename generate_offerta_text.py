@@ -23,6 +23,7 @@ from config import (
     SectionConfig,
     TEX_PATH,
 )
+from figure_style import escape_prose_for_latex
 
 
 def load_prompt(path: Path) -> str:
@@ -284,7 +285,7 @@ def postprocess_prose(raw: str, section: SectionConfig) -> str:
     if section.marker_start in text or section.marker_end in text:
         raise ValueError("La risposta del modello contiene marker di iniezione; rigenerare.")
 
-    return wrap_prose_twocolumn(text)
+    return wrap_prose_twocolumn(escape_prose_for_latex(text))
 
 
 def inject_prose(text: str, section: SectionConfig, prose: str) -> str:

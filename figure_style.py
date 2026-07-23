@@ -204,6 +204,11 @@ def latex_escape(text: str) -> str:
     return text
 
 
+def escape_prose_for_latex(text: str) -> str:
+    """Escape characters that break LaTeX body text but keep commands intact."""
+    return re.sub(r"(?<!\\)&", r"\\&", text)
+
+
 def braced_column(name: str) -> str:
     if " " in name or any(ch in name for ch in "%&_"):
         return "{" + name + "}"
