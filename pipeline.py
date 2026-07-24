@@ -9,6 +9,7 @@ import re
 import subprocess
 import sys
 import zipfile
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -43,6 +44,13 @@ RE_PDF_BROKEN_REF = re.compile(
     r"(?:Figura|Tabella|Figure|Table)\s*\?\?",
     re.IGNORECASE,
 )
+
+ProgressCallback = Callable[[str, str], None]
+
+
+def _notify(on_progress: ProgressCallback | None, step_id: str, phase: str) -> None:
+    if on_progress is not None:
+        on_progress(step_id, phase)
 
 
 @dataclass
@@ -98,6 +106,7 @@ def run_text_generation(
     max_attempts: int = RETRY_MAX_ATTEMPTS,
     pause_seconds: float = GEMINI_MIN_PAUSE_SECONDS,
     rate_limit: int = GEMINI_MAX_CALLS_PER_MINUTE,
+    on_progress: ProgressCallback | None = None,
 ) -> None:
     """Generate section prose (two-column wrapper applied in postprocess_prose)."""
     logger.info("Step 3/5 — generate prose (2-column text; figures stay full-width)")
@@ -108,6 +117,8 @@ def run_text_generation(
             window_seconds=max(pause_seconds, GEMINI_RATE_WINDOW_SECONDS),
         )
     for key in sections:
+        step_id = f"text:{key}"
+        _notify(on_progress, step_id, "start")
         logger.info("  generating section: %s", key)
         generate_section(
             key,
@@ -120,6 +131,7 @@ def run_text_generation(
             max_attempts=max_attempts,
             pause_seconds=pause_seconds,
         )
+        _notify(on_progress, step_id, "done")
 
 
 def run_build_pdf(*, passes: int = 2) -> Path:
@@ -211,6 +223,7 @@ def run_pipeline(
     passes: int = 2,
     fail_on_bad_refs: bool = True,
     artifact_dir: Path = DEFAULT_ARTIFACT_DIR,
+    on_progress: ProgressCallback | None = None,
 ) -> PipelineResult:
     """Run the full report pipeline and return paths + ref-check status."""
     steps: list[str] = []
@@ -218,13 +231,17 @@ def run_pipeline(
 
     try:
         if not skip_fetch:
+            _notify(on_progress, "fetch", "start")
             run_data_fetch()
+            _notify(on_progress, "fetch", "done")
             steps.append("fetch")
         else:
             steps.append("fetch:skipped")
 
         if not skip_figures:
+            _notify(on_progress, "figures", "start")
             run_figures()
+            _notify(on_progress, "figures", "done")
             steps.append("figures")
         else:
             steps.append("figures:skipped")
@@ -234,18 +251,23 @@ def run_pipeline(
                 model=model,
                 sections=section_keys,
                 inject_only=inject_only,
+                on_progress=on_progress,
             )
             steps.append("text" if not inject_only else "text:inject_only")
         else:
             steps.append("text:skipped")
 
         if not skip_build:
+            _notify(on_progress, "build", "start")
             run_build_pdf(passes=passes)
+            _notify(on_progress, "build", "done")
             steps.append("build")
         else:
             steps.append("build:skipped")
 
+        _notify(on_progress, "ref_check", "start")
         ref_check = check_references(TEX_PATH, PDF_PATH)
+        _notify(on_progress, "ref_check", "done")
         steps.append("ref_check")
 
         if fail_on_bad_refs and not ref_check.ok:
@@ -261,7 +283,9 @@ def run_pipeline(
 
         zip_path = None
         if PDF_PATH.is_file() and TEX_PATH.is_file():
+            _notify(on_progress, "package", "start")
             zip_path = package_artifacts(TEX_PATH, PDF_PATH, artifact_dir=artifact_dir)
+            _notify(on_progress, "package", "done")
             steps.append("package")
 
         return PipelineResult(

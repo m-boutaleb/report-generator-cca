@@ -75,15 +75,25 @@ Documentazione interattiva: `http://127.0.0.1:8000/docs`
 
 | Endpoint | Descrizione |
 |----------|-------------|
-| `POST /report/generate` | Pipeline completa; restituisce ZIP (sync) o `job_id` (`async_mode=true`) |
-| `GET /report/jobs/{id}` | Stato job async |
+| **`GET /report/generate`** | **Apri nel browser**: avvia la pipeline e reindirizza alla pagina di monitoraggio |
+| `GET /report/jobs/{id}` | Pagina HTML con barra di avanzamento (polling ogni 2 s) |
+| `GET /report/jobs/{id}/status` | Stato JSON del job (progresso per sezione) |
+| `POST /report/generate` | Pipeline via API; ZIP sync o `job_id` con `async_mode=true` |
 | `GET /report/jobs/{id}/download` | ZIP `main.tex` + `main.pdf` |
 | `GET /report/jobs/{id}/tex` | Solo `.tex` |
 | `GET /report/jobs/{id}/pdf` | Solo `.pdf` |
 | `GET /report/latest/download?kind=zip\|tex\|pdf` | Ultimo artifact / file corrente |
 | `GET /health` | Healthcheck |
 
-Esempio sync:
+**Generazione da browser** (consigliato):
+
+```text
+http://127.0.0.1:8000/report/generate
+```
+
+Opzioni via query string, es. `?inject_only=true&skip_fetch=true`.
+
+Esempio sync (curl):
 
 ```bash
 curl -X POST http://127.0.0.1:8000/report/generate -H "Content-Type: application/json" -d "{}" -o rapporto.zip
@@ -93,7 +103,7 @@ Esempio async:
 
 ```bash
 curl -X POST http://127.0.0.1:8000/report/generate -H "Content-Type: application/json" -d "{\"async_mode\": true}"
-# poi: GET /report/jobs/<job_id>  →  GET /report/jobs/<job_id>/download
+# poi: GET /report/jobs/<job_id>/status  oppure apri GET /report/jobs/<job_id> nel browser
 ```
 
 Opzioni body utili: `skip_fetch`, `skip_figures`, `skip_text`, `inject_only` (usa backup prosa locali), `fail_on_bad_refs`.

@@ -4,22 +4,30 @@
 from __future__ import annotations
 
 import logging
-import threading
-import uuid
-from datetime import datetime, timezone
-from enum import Enum
 from pathlib import Path
-from typing import Any
 
 from fastapi import BackgroundTasks, FastAPI, HTTPException, Query
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
 from pydantic import BaseModel, Field
 
 from config import ROOT, SECTION_GENERATION_ORDER
-from pipeline import DEFAULT_ARTIFACT_DIR, PipelineResult, run_pipeline
+from report_jobs import (
+    GenerateOptions,
+    JobStatus,
+    JobStatusResponse,
+    create_job,
+    execute_job_sync,
+    get_job,
+    job_lock_locked,
+    job_status_payload,
+    resolve_sections,
+)
 from test_google_ai import GEMINI_MODEL
 
 logger = logging.getLogger(__name__)
+
+STATIC_DIR = ROOT / "static"
+JOB_HTML_PATH = STATIC_DIR / "report_job.html"
 
 app = FastAPI(
     title="Rapporto CCA — Report Generator API",
@@ -28,18 +36,8 @@ app = FastAPI(
         "aggiornamento grafici in main.tex → generazione testo (2 colonne) → "
         "compilazione PDF → validazione \\ref → consegna ZIP (pdf+tex)."
     ),
-    version="1.0.0",
+    version="1.1.0",
 )
-
-_JOB_LOCK = threading.Lock()
-_JOBS: dict[str, dict[str, Any]] = {}
-
-
-class JobStatus(str, Enum):
-    queued = "queued"
-    running = "running"
-    succeeded = "succeeded"
-    failed = "failed"
 
 
 class GenerateRequest(BaseModel):
@@ -67,118 +65,62 @@ class GenerateRequest(BaseModel):
     )
 
 
-class JobInfo(BaseModel):
-    job_id: str
-    status: JobStatus
-    created_at: str
-    updated_at: str
-    steps: list[str] = []
-    error: str | None = None
-    ref_check: dict[str, Any] | None = None
-    download_url: str | None = None
-    tex_url: str | None = None
-    pdf_url: str | None = None
-
-
-def _now() -> str:
-    return datetime.now(timezone.utc).isoformat()
-
-
-def _resolve_sections(sections: list[str] | None) -> tuple[str, ...]:
-    if not sections:
-        return SECTION_GENERATION_ORDER
-    unknown = sorted(set(sections) - set(SECTION_GENERATION_ORDER))
-    if unknown:
-        raise ValueError(
-            f"Sezioni sconosciute: {', '.join(unknown)}. "
-            f"Consentite: {', '.join(SECTION_GENERATION_ORDER)}"
-        )
-    # Preserve canonical order
-    return tuple(k for k in SECTION_GENERATION_ORDER if k in sections)
-
-
-def _job_payload(job_id: str) -> JobInfo:
-    job = _JOBS[job_id]
-    return JobInfo(
-        job_id=job_id,
-        status=job["status"],
-        created_at=job["created_at"],
-        updated_at=job["updated_at"],
-        steps=job.get("steps") or [],
-        error=job.get("error"),
-        ref_check=job.get("ref_check"),
-        download_url=job.get("download_url"),
-        tex_url=job.get("tex_url"),
-        pdf_url=job.get("pdf_url"),
+def _options_from_request(request: GenerateRequest) -> GenerateOptions:
+    return GenerateOptions(
+        skip_fetch=request.skip_fetch,
+        skip_figures=request.skip_figures,
+        skip_text=request.skip_text,
+        inject_only=request.inject_only,
+        skip_build=request.skip_build,
+        model=request.model,
+        sections=request.sections,
+        passes=request.passes,
+        fail_on_bad_refs=request.fail_on_bad_refs,
     )
 
 
-def _apply_result(job_id: str, result: PipelineResult) -> None:
-    job = _JOBS[job_id]
-    job["updated_at"] = _now()
-    job["steps"] = result.steps
-    if result.ref_check:
-        job["ref_check"] = {
-            "ok": result.ref_check.ok,
-            "message": result.ref_check.message,
-            "missing_labels": result.ref_check.missing_labels,
-            "undefined_in_log": result.ref_check.undefined_in_log,
-            "broken_in_pdf": result.ref_check.broken_in_pdf,
-        }
-    if result.ok and result.zip_path and result.zip_path.is_file():
-        job["status"] = JobStatus.succeeded
-        job["zip_path"] = str(result.zip_path)
-        job["tex_path"] = str(result.tex_path)
-        job["pdf_path"] = str(result.pdf_path)
-        job["download_url"] = f"/report/jobs/{job_id}/download"
-        job["tex_url"] = f"/report/jobs/{job_id}/tex"
-        job["pdf_url"] = f"/report/jobs/{job_id}/pdf"
-        job["error"] = None
-    else:
-        job["status"] = JobStatus.failed
-        job["error"] = result.error or "Pipeline fallita"
-        if result.tex_path.is_file():
-            job["tex_path"] = str(result.tex_path)
-            job["tex_url"] = f"/report/jobs/{job_id}/tex"
-        if result.pdf_path.is_file():
-            job["pdf_path"] = str(result.pdf_path)
-            job["pdf_url"] = f"/report/jobs/{job_id}/pdf"
+def _options_from_query(
+    *,
+    skip_fetch: bool = False,
+    skip_figures: bool = False,
+    skip_text: bool = False,
+    inject_only: bool = False,
+    skip_build: bool = False,
+    model: str = GEMINI_MODEL,
+    passes: int = 2,
+    fail_on_bad_refs: bool = True,
+) -> GenerateOptions:
+    return GenerateOptions(
+        skip_fetch=skip_fetch,
+        skip_figures=skip_figures,
+        skip_text=skip_text,
+        inject_only=inject_only,
+        skip_build=skip_build,
+        model=model,
+        passes=passes,
+        fail_on_bad_refs=fail_on_bad_refs,
+    )
 
 
-def _execute_job(job_id: str, request: GenerateRequest) -> None:
-    if not _JOB_LOCK.acquire(blocking=False):
-        job = _JOBS[job_id]
-        job["status"] = JobStatus.failed
-        job["updated_at"] = _now()
-        job["error"] = "Un'altra generazione è già in corso. Riprova più tardi."
-        return
-
+def _enqueue_job(
+    options: GenerateOptions,
+    background_tasks: BackgroundTasks,
+) -> tuple[str, bool]:
+    """Create job and schedule background execution. Returns (job_id, started)."""
     try:
-        job = _JOBS[job_id]
-        job["status"] = JobStatus.running
-        job["updated_at"] = _now()
-        sections = _resolve_sections(request.sections)
-        result = run_pipeline(
-            skip_fetch=request.skip_fetch,
-            skip_figures=request.skip_figures,
-            skip_text=request.skip_text,
-            inject_only=request.inject_only,
-            skip_build=request.skip_build,
-            model=request.model,
-            sections=sections,
-            passes=request.passes,
-            fail_on_bad_refs=request.fail_on_bad_refs,
-            artifact_dir=DEFAULT_ARTIFACT_DIR,
+        resolve_sections(options.sections)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    if job_lock_locked():
+        raise HTTPException(
+            status_code=409,
+            detail="Una generazione è già in corso. Attendi il completamento e riprova.",
         )
-        _apply_result(job_id, result)
-    except Exception as exc:  # noqa: BLE001
-        logger.exception("Job %s fallito", job_id)
-        job = _JOBS[job_id]
-        job["status"] = JobStatus.failed
-        job["updated_at"] = _now()
-        job["error"] = str(exc)
-    finally:
-        _JOB_LOCK.release()
+
+    job_id = create_job(options)
+    background_tasks.add_task(execute_job_sync, job_id, options)
+    return job_id, True
 
 
 @app.get("/health")
@@ -191,52 +133,67 @@ def list_sections() -> dict[str, list[str]]:
     return {"sections": list(SECTION_GENERATION_ORDER)}
 
 
+@app.get("/report/generate")
+def generate_report_get(
+    background_tasks: BackgroundTasks,
+    skip_fetch: bool = Query(False),
+    skip_figures: bool = Query(False),
+    skip_text: bool = Query(False),
+    inject_only: bool = Query(False),
+    skip_build: bool = Query(False),
+    model: str = Query(GEMINI_MODEL),
+    passes: int = Query(2, ge=1, le=5),
+    fail_on_bad_refs: bool = Query(True),
+):
+    """
+    Avvia la pipeline in background e reindirizza alla pagina di monitoraggio.
+
+    Esempio: apri nel browser `http://host:8000/report/generate`
+    """
+    options = _options_from_query(
+        skip_fetch=skip_fetch,
+        skip_figures=skip_figures,
+        skip_text=skip_text,
+        inject_only=inject_only,
+        skip_build=skip_build,
+        model=model,
+        passes=passes,
+        fail_on_bad_refs=fail_on_bad_refs,
+    )
+    job_id, _ = _enqueue_job(options, background_tasks)
+    return RedirectResponse(url=f"/report/jobs/{job_id}", status_code=303)
+
+
 @app.post("/report/generate")
-def generate_report(
+def generate_report_post(
     request: GenerateRequest,
     background_tasks: BackgroundTasks,
 ):
     """
     Avvia la pipeline completa.
 
-    - `async_mode=false` (default): esegue in modo sincrono e restituisce lo ZIP
-      `main.tex` + `main.pdf` come download.
-    - `async_mode=true`: restituisce un `job_id`; lo stato si interroga con
-      `GET /report/jobs/{job_id}` e lo ZIP con `GET /report/jobs/{job_id}/download`.
+    - `async_mode=false` (default): esegue in modo sincrono e restituisce lo ZIP.
+    - `async_mode=true`: restituisce JSON con `job_id`; monitora con
+      `GET /report/jobs/{job_id}/status` o la pagina `GET /report/jobs/{job_id}`.
     """
-    try:
-        _resolve_sections(request.sections)
-    except ValueError as exc:
-        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    options = _options_from_request(request)
 
-    if _JOB_LOCK.locked() and not request.async_mode:
+    if request.async_mode:
+        job_id, _ = _enqueue_job(options, background_tasks)
+        return JSONResponse(
+            status_code=202,
+            content=job_status_payload(job_id).model_dump(),
+        )
+
+    if job_lock_locked():
         raise HTTPException(
             status_code=409,
             detail="Una generazione è già in corso. Usa async_mode=true oppure attendi.",
         )
 
-    job_id = uuid.uuid4().hex
-    _JOBS[job_id] = {
-        "status": JobStatus.queued,
-        "created_at": _now(),
-        "updated_at": _now(),
-        "steps": [],
-        "error": None,
-        "ref_check": None,
-        "download_url": None,
-        "tex_url": None,
-        "pdf_url": None,
-    }
-
-    if request.async_mode:
-        background_tasks.add_task(_execute_job, job_id, request)
-        return JSONResponse(
-            status_code=202,
-            content=_job_payload(job_id).model_dump(),
-        )
-
-    _execute_job(job_id, request)
-    job = _JOBS[job_id]
+    job_id = create_job(options)
+    execute_job_sync(job_id, options)
+    job = get_job(job_id)
     if job["status"] != JobStatus.succeeded:
         raise HTTPException(
             status_code=500,
@@ -247,6 +204,8 @@ def generate_report(
                 "steps": job.get("steps"),
                 "tex_url": job.get("tex_url"),
                 "pdf_url": job.get("pdf_url"),
+                "status_url": f"/report/jobs/{job_id}/status",
+                "page_url": f"/report/jobs/{job_id}",
             },
         )
 
@@ -262,18 +221,34 @@ def generate_report(
     )
 
 
-@app.get("/report/jobs/{job_id}", response_model=JobInfo)
-def get_job(job_id: str) -> JobInfo:
-    if job_id not in _JOBS:
-        raise HTTPException(status_code=404, detail="Job non trovato")
-    return _job_payload(job_id)
+@app.get("/report/jobs/{job_id}", response_class=HTMLResponse)
+def job_status_page(job_id: str) -> HTMLResponse:
+    """Pagina HTML con polling ogni 2 s su /report/jobs/{job_id}/status."""
+    try:
+        get_job(job_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail="Job non trovato") from exc
+    if not JOB_HTML_PATH.is_file():
+        raise HTTPException(status_code=500, detail="Template HTML mancante")
+    return HTMLResponse(JOB_HTML_PATH.read_text(encoding="utf-8"))
+
+
+@app.get("/report/jobs/{job_id}/status", response_model=JobStatusResponse)
+def job_status_json(job_id: str) -> JobStatusResponse:
+    """Stato JSON per polling (aggiornamento progresso per sezione)."""
+    try:
+        get_job(job_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail="Job non trovato") from exc
+    return job_status_payload(job_id)
 
 
 @app.get("/report/jobs/{job_id}/download")
 def download_zip(job_id: str):
-    if job_id not in _JOBS:
-        raise HTTPException(status_code=404, detail="Job non trovato")
-    job = _JOBS[job_id]
+    try:
+        job = get_job(job_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail="Job non trovato") from exc
     zip_path = job.get("zip_path")
     if not zip_path or not Path(zip_path).is_file():
         raise HTTPException(status_code=404, detail="ZIP non disponibile per questo job")
@@ -283,9 +258,11 @@ def download_zip(job_id: str):
 
 @app.get("/report/jobs/{job_id}/tex")
 def download_tex(job_id: str):
-    if job_id not in _JOBS:
-        raise HTTPException(status_code=404, detail="Job non trovato")
-    tex_path = _JOBS[job_id].get("tex_path")
+    try:
+        job = get_job(job_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail="Job non trovato") from exc
+    tex_path = job.get("tex_path")
     if not tex_path or not Path(tex_path).is_file():
         raise HTTPException(status_code=404, detail="TEX non disponibile")
     path = Path(tex_path)
@@ -294,9 +271,11 @@ def download_tex(job_id: str):
 
 @app.get("/report/jobs/{job_id}/pdf")
 def download_pdf(job_id: str):
-    if job_id not in _JOBS:
-        raise HTTPException(status_code=404, detail="Job non trovato")
-    pdf_path = _JOBS[job_id].get("pdf_path")
+    try:
+        job = get_job(job_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail="Job non trovato") from exc
+    pdf_path = job.get("pdf_path")
     if not pdf_path or not Path(pdf_path).is_file():
         raise HTTPException(status_code=404, detail="PDF non disponibile")
     path = Path(pdf_path)
@@ -308,6 +287,8 @@ def download_latest(
     kind: str = Query("zip", pattern="^(zip|tex|pdf)$"),
 ):
     """Scarica l'ultimo artifact prodotto in output/artifacts (o main.* corrente)."""
+    from pipeline import DEFAULT_ARTIFACT_DIR
+
     if kind == "tex":
         path = ROOT / "main.tex"
         media = "application/x-tex"

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Generazione rapporto — CCA</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f6f7f9;
+      --card: #fff;
+      --text: #1a1a1a;
+      --muted: #5c6570;
+      --accent: #2563eb;
+      --ok: #15803d;
+      --err: #b91c1c;
+      --border: #e5e7eb;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1419;
+        --card: #1a2332;
+        --text: #eef2f7;
+        --muted: #9aa4b2;
+        --border: #2d3748;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 2rem 1rem;
+      line-height: 1.5;
+    }
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem 1.75rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,.06);
+    }
+    h1 { font-size: 1.35rem; margin: 0 0 .25rem; }
+    .sub { color: var(--muted); font-size: .9rem; margin-bottom: 1.25rem; word-break: break-all; }
+    .status-pill {
+      display: inline-block;
+      padding: .2rem .65rem;
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+    .status-pill.running { background: #fef3c7; color: #92400e; }
+    .status-pill.succeeded { background: #dcfce7; color: var(--ok); }
+    .status-pill.failed { background: #fee2e2; color: var(--err); }
+    progress {
+      width: 100%;
+      height: 1.1rem;
+      margin: 1rem 0 .5rem;
+      accent-color: var(--accent);
+    }
+    .pct { font-variant-numeric: tabular-nums; font-weight: 600; }
+    .current { min-height: 1.5rem; color: var(--muted); margin: .5rem 0 1rem; }
+    ul.steps { list-style: none; padding: 0; margin: 0; max-height: 280px; overflow: auto; }
+    ul.steps li {
+      padding: .35rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: .92rem;
+    }
+    ul.steps li.done::before { content: "✓ "; color: var(--ok); font-weight: 700; }
+    .error {
+      background: #fef2f2;
+      color: var(--err);
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: .75rem 1rem;
+      margin: 1rem 0;
+      white-space: pre-wrap;
+    }
+    .downloads { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.25rem; }
+    .downloads a {
+      display: inline-block;
+      padding: .55rem 1rem;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: .92rem;
+    }
+    .downloads a.secondary { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Generazione rapporto</h1>
+    <p class="sub">Job <code id="job-id"></code></p>
+    <p><span id="status-pill" class="status-pill">—</span></p>
+    <progress id="progress" max="100" value="0"></progress>
+    <p class="pct"><span id="progress-pct">0</span>% — sezioni testo: <span id="sections-done">0</span> / <span id="sections-total">0</span></p>
+    <p class="current" id="current-label">In attesa…</p>
+    <div id="error-box" class="error hidden"></div>
+    <ul class="steps" id="completed-list"></ul>
+    <div id="downloads" class="downloads hidden"></div>
+  </main>
+  <script>
+    const jobId = window.location.pathname.replace(/\/+$/, "").split("/").pop();
+    document.getElementById("job-id").textContent = jobId;
+
+    const el = {
+      pill: document.getElementById("status-pill"),
+      progress: document.getElementById("progress"),
+      pct: document.getElementById("progress-pct"),
+      sectionsDone: document.getElementById("sections-done"),
+      sectionsTotal: document.getElementById("sections-total"),
+      current: document.getElementById("current-label"),
+      error: document.getElementById("error-box"),
+      list: document.getElementById("completed-list"),
+      downloads: document.getElementById("downloads"),
+    };
+
+    const labelMap = {
+      fetch: "Download CSV",
+      figures: "Grafici e tabelle",
+      build: "Compilazione PDF",
+      ref_check: "Controllo riferimenti",
+      package: "Creazione ZIP",
+    };
+
+    function stepLabel(id) {
+      if (labelMap[id]) return labelMap[id];
+      if (id.startsWith("text:")) return "Testo: " + id.slice(5).replace(/_/g, " ");
+      return id;
+    }
+
+    function render(data) {
+      el.pill.textContent = data.status;
+      el.pill.className = "status-pill " + data.status;
+      el.progress.value = data.progress_pct || 0;
+      el.pct.textContent = data.progress_pct || 0;
+      el.sectionsDone.textContent = data.sections_done || 0;
+      el.sectionsTotal.textContent = data.sections_total || 0;
+
+      if (data.status === "running" && data.current_label) {
+        el.current.textContent = "In corso: " + data.current_label;
+      } else if (data.status === "queued") {
+        el.current.textContent = "In coda…";
+      } else if (data.status === "succeeded") {
+        el.current.textContent = "Completato.";
+      } else if (data.status === "failed") {
+        el.current.textContent = "Generazione fallita.";
+      } else {
+        el.current.textContent = "";
+      }
+
+      el.list.innerHTML = "";
+      (data.completed || []).forEach(function (id) {
+        const li = document.createElement("li");
+        li.className = "done";
+        li.textContent = stepLabel(id);
+        el.list.appendChild(li);
+      });
+
+      if (data.error) {
+        el.error.textContent = data.error;
+        el.error.classList.remove("hidden");
+      } else {
+        el.error.classList.add("hidden");
+      }
+
+      el.downloads.innerHTML = "";
+      if (data.status === "succeeded") {
+        el.downloads.classList.remove("hidden");
+        if (data.pdf_url) {
+          const a = document.createElement("a");
+          a.href = data.pdf_url;
+          a.textContent = "Scarica PDF";
+          el.downloads.appendChild(a);
+        }
+        if (data.download_url) {
+          const a = document.createElement("a");
+          a.href = data.download_url;
+          a.textContent = "Scarica ZIP (tex + pdf)";
+          a.className = "secondary";
+          el.downloads.appendChild(a);
+        }
+        if (data.tex_url) {
+          const a = document.createElement("a");
+          a.href = data.tex_url;
+          a.textContent = "Scarica LaTeX";
+          a.className = "secondary";
+          el.downloads.appendChild(a);
+        }
+      } else {
+        el.downloads.classList.add("hidden");
+      }
+    }
+
+    let timer = null;
+
+    async function poll() {
+      try {
+        const res = await fetch("/report/jobs/" + jobId + "/status");
+        if (!res.ok) {
+          el.current.textContent = res.status === 404 ? "Job non trovato." : "Errore " + res.status;
+          if (timer) clearInterval(timer);
+          return;
+        }
+        const data = await res.json();
+        render(data);
+        if (data.status === "succeeded" || data.status === "failed") {
+          if (timer) clearInterval(timer);
+        }
+      } catch (err) {
+        el.current.textContent = "Errore di rete durante l'aggiornamento.";
+      }
+    }
+
+    poll();
+    timer = setInterval(poll, 2000);
+  </script>
+</body>
+</html>

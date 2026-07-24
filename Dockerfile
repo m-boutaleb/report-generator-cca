@@ -32,6 +32,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Application source (secrets.json is NOT copied; mount or inject at runtime)
 COPY *.py ./
 COPY prompts/ ./prompts/
+COPY static/ ./static/
 COPY secrets.example.json ./
 COPY main.tex ./
 
